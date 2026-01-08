@@ -1,0 +1,22 @@
+\contentsline {section}{\numberline {1}Wstęp}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Koncepcja architektury systemu telemetrycznego}{2}{subsection.1.1}%
+\contentsline {section}{\numberline {2}Przegląd technologii i narzędzi}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}System globalnego pozycjonowania (GNSS)}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Magistrale komunikacyjne w systemach wbudowanych}{3}{subsection.2.2}%
+\contentsline {section}{\numberline {3}Projekt sprzętowy}{3}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Szczegółowa konfiguracja interfejsów}{3}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}System zasilania i stabilizacja}{3}{subsection.3.2}%
+\contentsline {section}{\numberline {4}Implementacja oprogramowania}{4}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Bezpieczeństwo danych (Mutex)}{4}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Struktura danych (Współdzielony Status)}{5}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Logika sterowania (Maszyna Stanów)}{5}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Interfejs WWW (Strona wbudowana w układ)}{5}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Tryb głębokiego uśpienia (Deep Sleep)}{6}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Filtracja błędów GPS (Auto-Pause)}{6}{subsection.4.6}%
+\contentsline {section}{\numberline {5}Testy i analiza wyników}{6}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Testy modułu GPS (Cold Start vs Hot Start)}{6}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Stabilność zapisu danych w sytuacjach awaryjnych}{7}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Bilans energetyczny i czas pracy}{7}{subsection.5.3}%
+\contentsline {section}{\numberline {6}Podsumowanie i wnioski}{7}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Osiągnięcia}{7}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Ograniczenia i plany rozwojowe}{8}{subsection.6.2}%

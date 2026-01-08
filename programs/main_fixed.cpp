@@ -32,13 +32,7 @@
 #define AUTO_PAUSE_SPEED 2.0 // km/h
 #define AUTO_PAUSE_TIME 5000 // ms
 #define MIN_DIST 5.0 // meters
-#define GPS_READ_LIMIT 1000 // Max NMEA chars per loop iteration
-
-// --- PINY ADC ---
-#define BATTERY_PIN 34 // GPIO 34 (Analog Input)
-#define BATTERY_MAX_VOLTAGE 4.2 
-#define BATTERY_R1 100000.0 // 100k
-#define BATTERY_R2 100000.0 // 100k - Adjust based on your divider
+#define GPS_READ_LIMIT 100 // Max NMEA chars per loop iteration
 
 // --- OBIEKTY ---
 TinyGPSPlus gps;
@@ -53,14 +47,12 @@ SemaphoreHandle_t sdMutex = NULL;
 // --- ZMIENNE STANU ---
 enum State { IDLE, RECORDING, PAUSED };
 State currentState = IDLE;
-bool shouldSleep = false;
 
 // Struktura do współdzielenia stanu z wątkiem serwera (Atomowość)
 struct TrackerStatus {
-    double lat, lon, speed, alt, dist, hdop;
+    double lat, lon, speed, alt, dist;
     int sats;
     float ax, ay, az;
-    float batt; // Napięcie baterii
     int state;
 } sharedStatus;
 
@@ -89,16 +81,10 @@ void stopRec();
 bool checkMotion();
 String getFileList();
 void updateSharedStatus();
-float readBattery();
-void enterSleep();
 
 void setup() {
     Serial.begin(115200);
     
-    // Konfiguracja ADC
-    pinMode(BATTERY_PIN, INPUT);
-    analogReadResolution(12); // ESP32 default 12-bit (0-4095)
-
     // Mutex MUSI być utworzony PRZED setupHardware (SD init)
     sdMutex = xSemaphoreCreateMutex();
     if(sdMutex == NULL) {
@@ -117,33 +103,10 @@ void setup() {
 void loop() {
     // 1. GPS Feed (LIMITED to avoid blocking)
     int gpsCharsRead = 0;
-    static unsigned long totalGpsBytes = 0;
     while(gpsSerial.available() && gpsCharsRead < GPS_READ_LIMIT) {
         gps.encode(gpsSerial.read());
         gpsCharsRead++;
-        totalGpsBytes++;
     }
-
-    // --- DEBUG GPS (Added for troubleshooting) ---
-    static unsigned long lastDebug = 0;
-    if (millis() - lastDebug > 2000) {
-        lastDebug = millis();
-        if (totalGpsBytes == 0) {
-             Serial.println("[GPS ERROR] Brak danych z GPS! Sprawdz zasilanie modulu i polaczenia (TX->RX, RX->TX).");
-        } else {
-             Serial.print("[GPS OK] Odbieram dane. Bytes: ");
-             Serial.print(totalGpsBytes);
-             Serial.print(" Sats: ");
-             Serial.print(gps.satellites.value());
-             Serial.print(" Fix: ");
-             Serial.print(gps.location.isValid() ? "TAK" : "NIE");
-             Serial.print(" Chars: ");
-             Serial.print(gps.charsProcessed());
-             Serial.print(" ErrCRC: ");
-             Serial.println(gps.failedChecksum());
-        }
-    }
-    // ---------------------------------------------
     
     // 2. MPU Update (Always run for IMU)
     if(mpuReady) mpu.update();
@@ -157,24 +120,9 @@ void loop() {
         displayLoop();
         lastDisp = millis();
     }
-    
-    // 5. Sleep Handle
-    if(shouldSleep) {
-        enterSleep();
-    }
 }
 
 // --- IMPLEMENTACJA ---
-
-float readBattery() {
-    int raw = analogRead(BATTERY_PIN);
-    // Vout = (raw / 4095.0) * 3.3V
-    // Vin = Vout * (R1+R2)/R2
-    float vout = (raw / 4095.0) * 3.3;
-    float vin = vout * (BATTERY_R1 + BATTERY_R2) / BATTERY_R2;
-    // Add small calibration correction if needed
-    return vin; 
-}
 
 void setupHardware() {
     Wire.begin(I2C_SDA, I2C_SCL);
@@ -214,7 +162,6 @@ void setupHardware() {
 
     // GPS
     gpsSerial.begin(9600, SERIAL_8N1, GPS_RX, GPS_TX);
-    Serial.println("GPS init: RX=" + String(GPS_RX) + ", TX=" + String(GPS_TX));
 }
 
 void setupWiFi() {
@@ -272,7 +219,7 @@ void setupServer() {
     // Status API - ATOMIC READ
     server.on("/api/status", HTTP_GET, [](AsyncWebServerRequest *request){
         String json;
-        json.reserve(300); // Increased size for new fields
+        json.reserve(256);
         
         // Szybka próba pobrania mutexu (nie blokujemy serwera)
         if(xSemaphoreTake(sdMutex, pdMS_TO_TICKS(10)) == pdTRUE) {
@@ -284,9 +231,7 @@ void setupServer() {
             json += "\"lon\":" + String(sharedStatus.lon, 6) + ",";
             json += "\"speed\":" + String(sharedStatus.speed, 1) + ",";
             json += "\"alt\":" + String(sharedStatus.alt, 1) + ",";
-            json += "\"hdop\":" + String(sharedStatus.hdop, 1) + ","; // New
             json += "\"dist\":" + String(sharedStatus.dist, 1) + ",";
-            json += "\"batt\":" + String(sharedStatus.batt, 2) + ","; // New
             json += "\"ax\":" + String(sharedStatus.ax, 2) + ",";
             json += "\"ay\":" + String(sharedStatus.ay, 2) + ",";
             json += "\"az\":" + String(sharedStatus.az, 2);
@@ -358,15 +303,6 @@ void setupServer() {
         request->send(200);
     });
 
-    server.on("/api/sleep", HTTP_GET, [](AsyncWebServerRequest *request){
-        if(currentState == IDLE) {
-            request->send(200);
-            shouldSleep = true; 
-        } else {
-            request->send(400, "text/plain", "Stop Recording First");
-        }
-    });
-
     // Files API
     server.on("/api/files", HTTP_GET, [](AsyncWebServerRequest *request){
         String list = getFileList();
@@ -429,13 +365,11 @@ void updateSharedStatus() {
         sharedStatus.lon = gps.location.isValid() ? gps.location.lng() : 0.0;
         sharedStatus.speed = gps.speed.kmph();
         sharedStatus.alt = gps.altitude.meters();
-        sharedStatus.hdop = gps.hdop.hdop(); // New
         sharedStatus.sats = (int)gps.satellites.value();
         sharedStatus.dist = totalDist;
         sharedStatus.ax = mpuReady ? mpu.getAccX() : 0.0;
         sharedStatus.ay = mpuReady ? mpu.getAccY() : 0.0;
         sharedStatus.az = mpuReady ? mpu.getAccZ() : 0.0;
-        sharedStatus.batt = readBattery(); // New
         sharedStatus.state = currentState;
         xSemaphoreGive(sdMutex);
     }
@@ -503,20 +437,18 @@ void logData() {
     );
     
     if(d > MIN_DIST || lastLat == 0) {
-        char line[180]; // Increased buffer
+        char line[150];
         snprintf(line, sizeof(line), 
-            "%lu,%.6f,%.6f,%.1f,%.1f,%.1f,%d,%.2f,%.2f,%.2f,%.2f\n",
+            "%lu,%.6f,%.6f,%.1f,%.1f,%d,%.2f,%.2f,%.2f\n",
             millis(),
             gps.location.lat(),
             gps.location.lng(),
             gps.speed.kmph(),
             gps.altitude.meters(),
-            gps.hdop.hdop(), // New
             (int)gps.satellites.value(),
             mpuReady ? mpu.getAccX() : 0.0,
             mpuReady ? mpu.getAccY() : 0.0,
-            mpuReady ? mpu.getAccZ() : 0.0,
-            readBattery() // New
+            mpuReady ? mpu.getAccZ() : 0.0
         );
         
         // Zapis do logBuffer i ewentualny flush POD MUTEXEM
@@ -591,25 +523,8 @@ void stopRec() {
     }
 }
 
-void enterSleep() {
-    Serial.println("Entering Sleep Mode...");
-    display.clearDisplay();
-    display.setTextSize(1);
-    display.setTextColor(WHITE);
-    display.setCursor(0,10);
-    display.println("    USYPIANIE...");
-    display.println("");
-    display.println("  Aby obudzic:");
-    display.println("  Wcisnij RESET");
-    display.display();
-    delay(3000); 
-    display.ssd1306_command(SSD1306_DISPLAYOFF);
-    WiFi.disconnect(true);
-    WiFi.mode(WIFI_OFF);
-    esp_deep_sleep_start();
-}
-
 String getFileList() {
+    if(!sdReady) return "[]";
     
     String json;
     json.reserve(512); 
