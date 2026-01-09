@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1767976999 "/home/pawel/GPS-Tracker/docs/sample.tex" "sample.pdf" "sample" 1767977000
+["pdflatex"] 1767977977 "/home/pawel/GPS-Tracker/docs/sample.tex" "sample.pdf" "sample" 1767977978
   "../images/20260109_150650.jpg" 1767964178 687782 feafb5b527c65db7e180cc3bf5184697 ""
   "../images/GPS_tracke2r.png" 1767890557 141851 6eccd4e22a29d8a5e59fef908819988a ""
   "../images/GPS_tracker.png" 1767890557 159296 3f96d6bb7d915d38ea4c584c6e9b942a ""
@@ -22,7 +22,7 @@
   "/home/pawel/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecti1200.600pk" 1767817661 39096 d8b4e701413922a300e6dd6e0e063f66 ""
   "/home/pawel/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1200.600pk" 1767817662 24132 e74af9fa5265e21ba7631221bbb36440 ""
   "/home/pawel/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1200.600pk" 1767817663 14040 4d0884f85157804a3c8e5b7b1b0dbdae ""
-  "/home/pawel/GPS-Tracker/docs/sample.tex" 1767976999 32508 197dfd2a546adab3b9379187307ad4c0 ""
+  "/home/pawel/GPS-Tracker/docs/sample.tex" 1767977977 33218 ce36eec9f42799f759b23211f146392d ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecbx1200.tfm" 1136768653 3584 402da0b29eafbad07963b1224b222f18 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecbx1440.tfm" 1136768653 3584 13049b61b922a28b158a38aeff75ee9b ""
@@ -101,10 +101,10 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1644012257 39432 7155514e09a3d69036fac785183a21c2 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1767812569 128028 f533b797fba58d231669ea19e894e23e ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1767812573 1405646 8ea90868fda1625df0cb4e8a125e0663 ""
-  "sample.aux" 1767976999 8125 f8f7f3b22b05b825f91459943e6031fd "pdflatex"
-  "sample.out" 1767976999 5004 408ea5d56e9670d4e5ef00a92d75451e "pdflatex"
-  "sample.tex" 1767976999 32508 197dfd2a546adab3b9379187307ad4c0 ""
-  "sample.toc" 1767976999 2259 0c6fc21b39ce36371cf21c2ce44dba40 "pdflatex"
+  "sample.aux" 1767977978 8121 01a84f9eb457f99d22b8ffecb53795b8 "pdflatex"
+  "sample.out" 1767977978 4981 9094981566973d692efc624f001f0164 "pdflatex"
+  "sample.tex" 1767977977 33218 ce36eec9f42799f759b23211f146392d ""
+  "sample.toc" 1767977978 2255 32d08bd52c15e2e303db273e89dced90 "pdflatex"
   (generated)
   "sample.aux"
   "sample.log"

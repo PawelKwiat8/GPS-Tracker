@@ -458,24 +458,25 @@ Jest to wynik satysfakcjonujący dla jednodniowej wycieczki rowerowej lub piesze
 
 \section{Podsumowanie i wnioski}
 
-Zrealizowany projekt inżynierski spełnił postawione przed nim założenia. Udało się zbudować autonomiczny, miniaturowy system rejestracji trasy, który z powodzeniem zastępuje komercyjne rozwiązania w zastosowaniach amatorskich i półprofesjonalnych.
+\subsection{Wnioski końcowe}
+Przeprowadzone testy i analiza działania prototypu pozwalają na sformułowanie następujących wniosków:
 
-\subsection{Osiągnięcia}
-Względem pierwotnych prototypów, obecna wersja urządzenia charakteryzuje się:
-\begin{itemize}
-    \item \textbf{Pełną wielozadaniowością:} Rozdzielenie logiki zapisu danych od obsługi interfejsu użytkownika wyeliminowało problemy z "przycinaniem się" strony WWW.
-    \item \textbf{Jakością danych:} Zastosowanie filtru \textit{Auto-Pause} znacząco poprawiło czytelność generowanych śladów GPX/TXT, eliminując szum pomiarowy na postojach.
-    \item \textbf{Ergonomią:} Interfejs WWW dostępny na smartfonie eliminuje konieczność montowania fizycznych przycisków i dużych wyświetlaczy LCD na obudowie.
-\end{itemize}
-
-\subsection{Ograniczenia i plany rozwojowe}
-Obecna rewizja urządzenia posiada pewne ograniczenia, które wyznaczają kierunki dalszych prac rozwojowych:
 \begin{enumerate}
-    \item \textbf{Brak łączności globalnej:} Urządzenie wymaga połączenia WiFi z telefonem użytkownika. Dodanie modułu GSM (np. SIM800L) pozwoliłoby na wysyłanie pozycji do chmury niezależnie od obecności operatora.
-   
+    \item \textbf{Stabilność działania:} Dzięki wykorzystaniu dwóch rdzeni procesora ESP32, urządzenie działa płynnie. Nagrywanie trasy na kartę odbywa się niezależnie od obsługi WiFi, więc korzystanie z podglądu na telefonie nie zakłóca zapisu danych.
+    \item \textbf{Prosty i szybki interfejs:} Strona WWW została napisana tak, aby nie obciążać procesora. Telefon pobiera tylko surowe liczby, a nie całą grafikę, dzięki czemu aplikacja działa szybko i nie zacina się.
+    \item \textbf{Jakość modułu GPS:} Tani moduł NEO-6M jest wystarczający do turystyki pieszej i zastosowań amatorskich. W testach statycznych wykazuje wysoką precyzję, jednak w dynamicznym ruchu (bieg) i trudnym terenie (las) jego dokładność spada, co jest typowe dla odbiorników bez wspomagania inercyjnego.
+    \item \textbf{Efektywność energetyczna:} Osiągnięty czas pracy na poziomie ok. 9 godzin przy zasilaniu z jednego ogniwa 18650 (z przetwornicą) czyni urządzenie praktycznym w jednodniowych zastosowaniach.
+    \item \textbf{Obudowa 3D:} Zaprojektowana obudowa jest kompaktowa i funkcjonalna. Chroni elektronikę przed uszkodzeniami mechanicznymi, zapewniając jednocześnie łatwy dostęp do portu ładowania i karty pamięci.
 \end{enumerate}
 
-Podsumowując, zaprojektowany system stanowi solidną bazę do dalszego rozwoju systemów IoT przeznaczonych do monitoringu floty i aktywności fizycznej.
+\subsection{Podsumowanie działania}
+Zrealizowany system działa w pełni poprawnie i spełnił wszystkie założenia oraz cel pracy. Urządzenie pomyślnie przeszło testy terenowe, rejestrując trasy bez awarii. Projekt udowodnił, że wykorzystując tanie i ogólnodostępne moduły (ESP32, NEO-6M), można zbudować narzędzie telemetryczne o funkcjonalności zbliżonej do prostych urządzeń komercyjnych.
+
+Dodatkową wartością projektu jest jego aspekt edukacyjny. 
+Budowa urządzenia wymagała połączenia wiedzy z zakresu elektroniki,
+ druku 3D oraz programowania systemów wbudowanych i aplikacji webowych. 
+ Powstały prototyp jest nie tylko działającym urządzeniem, ale także solidną platformą 
+ do dalszego rozwoju, np. poprzez dodanie modułu GSM w przyszłości.
 
 \newpage
 \begin{thebibliography}{99}
