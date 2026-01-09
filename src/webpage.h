@@ -46,7 +46,8 @@ const char index_html[] PROGMEM = R"rawliteral(
         /* MAP */
         #map-box { height:300px; background:#222; border-radius:8px; margin-bottom:10px; position:relative; overflow:hidden; }
         #map { height:100%; width:100%; }
-        .pause-overlay { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(255, 165, 0, 0.9); color:#000; padding:10px 20px; font-weight:bold; border-radius:8px; z-index:1000; display:none; animation:blink 1.5s infinite; }
+        .pause-overlay { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(255, 165, 0, 0.9); color:#000; padding:10px 20px; font-weight:bold; border-radius:8px; z-index:1000; display:none; animation:blink 1.5s infinite; pointer-events:none; }
+        .center-btn { position:absolute; bottom:20px; right:20px; background:rgba(0,0,0,0.7); color:#fff; border:1px solid #777; padding:8px 12px; border-radius:50px; z-index:900; cursor:pointer; font-size:0.8rem; display:none; }
         @keyframes blink { 50% { opacity:0.7; } }
 
         /* CHARTS - stacked vertically */
@@ -73,7 +74,10 @@ const char index_html[] PROGMEM = R"rawliteral(
 <body>
     <header>
         <div id="app-mode" class="mode-ind mode-live">LIVE MONITOR</div>
-        <div id="conn-state" class="conn-stat">OCZEKIWANIE...</div>
+        <div style="display:flex; gap:10px; align-items:center;">
+             <button id="btn-reconnect" class="btn btn-blue" style="display:none; padding: 2px 8px;" onclick="req('/api/reconnect')">WIFI</button>
+             <div id="conn-state" class="conn-stat">OCZEKIWANIE...</div>
+        </div>
     </header>
     
     <!-- FILE VIEWER HEADER (Visible only in Playback) -->
@@ -90,8 +94,9 @@ const char index_html[] PROGMEM = R"rawliteral(
     <!-- DASHBOARD -->
     <div id="dash" class="page active">
         <!-- Control Panel -->
-        <div id="pnl-idle" class="grid">
-            <button class="btn btn-green full" onclick="req('/api/start')">START</button>            <button class="btn btn-blue full" onclick="req('/api/sleep')">UŚPIJ (Deep Sleep)</button>        </div>
+        <div id="pnl-idle" class="grid full">
+            <button class="btn btn-green full" onclick="req('/api/start')">START</button>
+        </div>
         <div id="pnl-rec" class="grid" style="display:none;">
             <button class="btn btn-blue full" onclick="req('/api/pause')">PAUZA</button>
         </div>
@@ -104,15 +109,10 @@ const char index_html[] PROGMEM = R"rawliteral(
         <div id="map-box">
             <div id="map"></div>
             <div id="pause-msg" class="pause-overlay">⏸️ PAUZA / AUTO-PAUZA</div>
+            <button id="recenter-btn" class="center-btn" onclick="enableFollow()">⌖ WYŚRODKUJ</button>
         </div>
 
-        <div class="charts-container">
-            <div class="chart-wrap"><canvas id="c-speed"></canvas></div>
-            <div class="chart-wrap"><canvas id="c-alt"></canvas></div>
-            <div class="chart-wrap"><canvas id="c-hdop"></canvas></div>
-        </div>
-
-        <div class="grid">
+        <div id="grid-live" class="grid">
             <div class="card"><div id="v-speed" class="val">0.0</div><div class="lbl">Prędkość km/h</div></div>
             <div class="card"><div id="v-alt" class="val">0</div><div class="lbl">Wysokość m</div></div>
             <div class="card"><div id="v-dist" class="val">0.00</div><div class="lbl">Dystans km</div></div>
@@ -120,7 +120,25 @@ const char index_html[] PROGMEM = R"rawliteral(
             <div class="card"><div id="v-hdop" class="val">-</div><div class="lbl">HDOP</div></div>
             <div class="card"><div id="v-batt" class="val">-</div><div class="lbl">Bateria V</div></div>
         </div>
+
+        <!-- REVIEW STATS GRID (Hidden by default) -->
+        <div id="grid-review" class="grid" style="display:none">
+            <div class="card"><div id="r-avg-speed" class="val">0.0</div><div class="lbl">Śr. Prędkość</div></div>
+            <div class="card"><div id="r-dist" class="val">0.00</div><div class="lbl">Dystans km</div></div>
+            <div class="card"><div id="r-ascent" class="val">0</div><div class="lbl">Wznios m</div></div>
+            <div class="card"><div id="r-descent" class="val">0</div><div class="lbl">Spadek m</div></div>
+            <div class="card"><div id="r-avg-hdop" class="val">-</div><div class="lbl">Śr. HDOP</div></div>
+            <div class="card"><div id="r-max-alt" class="val">0</div><div class="lbl">Max Wys.</div></div>
+        </div>
+
         <div class="warn-msg" id="gps-warn">Szukanie sygnału GPS...</div>
+
+        <div class="charts-container">
+            <div class="chart-wrap"><canvas id="c-speed"></canvas></div>
+            <div class="chart-wrap"><canvas id="c-alt"></canvas></div>
+            <div class="chart-wrap"><canvas id="c-hdop"></canvas></div>
+            <div class="chart-wrap"><canvas id="c-accel"></canvas></div>
+        </div>
     </div>
 
     <!-- FILES -->
@@ -134,18 +152,61 @@ const char index_html[] PROGMEM = R"rawliteral(
     <script>
         // GLOBAL STATE
         let map, poly, viewPoly, marker;
-        let cSpeed, cAlt, cHdop;
+        let cSpeed, cAlt, cHdop, cAccel;
         let mode = 'LIVE'; // LIVE | VIEW
         let refreshing = false;
         let startMarker, endMarker; // Markers for file view
+        let followMode = true; // Auto-center map on new pos
+        let initLoadDone = false;
         
         // INIT
         window.onload = () => {
-            initMap();
-            initCharts();
+            try { initMap(); } catch(e) { console.log('Map err: ' + e); }
+            try { 
+                initCharts(); 
+            } catch(e) { 
+                console.log('Chart err: ' + e); 
+                const c = document.querySelector('.charts-container');
+                if(c) c.innerHTML = '<div style="padding:10px;text-align:center;color:#777">Wykresy niedostępne (Offline)</div>';
+            }
+            
             setInterval(loop, 1500); // Main loop
             loadList(); // Initial load
+            restoreTrack();
         };
+
+        function restoreTrack() {
+            fetch('/api/track')
+            .then(r => {
+                if(r.status === 200) return r.json();
+                return null;
+            })
+            .then(points => {
+                if(!points || points.length === 0) return;
+                
+                // Restore track polyline
+                for(let pt of points) {
+                    if(pt.lat && pt.lon && pt.lat !== 0) {
+                        poly.addLatLng([pt.lat, pt.lon]);
+                    }
+                }
+                
+                // Restore charts with historical data
+                for(let pt of points) {
+                    if(pt.elapsed !== undefined) {
+                        pushChart(cSpeed, pt.speed || 0, pt.elapsed);
+                        pushChart(cAlt, pt.alt || 0, pt.elapsed);
+                        pushChart(cHdop, pt.hdop || 0, pt.elapsed);
+                    }
+                }
+                
+                if(poly.getLatLngs().length > 0) {
+                    map.fitBounds(poly.getBounds());
+                }
+                initLoadDone = true;
+            })
+            .catch(e => console.log('No active track to restore'));
+        }
 
         function initMap() {
             try {
@@ -158,7 +219,22 @@ const char index_html[] PROGMEM = R"rawliteral(
                 poly = L.polyline([], {color:'#bb86fc', weight:4}).addTo(map);
                 viewPoly = L.polyline([], {color:'#3498db', weight:4, dashArray:'5,5'}).addTo(map);
                 marker = L.circleMarker([0,0], {radius:5, color:'#fff'}).addTo(map);
+                
+                // User Interaction
+                map.on('dragstart', () => { 
+                    followMode = false; 
+                    document.getElementById('recenter-btn').style.display = 'block'; 
+                });
+                
             } catch(e) { document.getElementById('map-box').innerHTML = '<div style="padding:20px;text-align:center">Brak Internetu - Mapa Offline</div>'; }
+        }
+
+        function enableFollow() {
+            followMode = true;
+            document.getElementById('recenter-btn').style.display = 'none';
+            // Force center if we have a position
+            const ll = marker.getLatLng();
+            if(ll.lat !== 0) map.setView(ll, 16);
         }
 
         function initCharts() {
@@ -183,9 +259,19 @@ const char index_html[] PROGMEM = R"rawliteral(
                         suggestedMin: 0
                     }
                 }, 
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
                 plugins:{
-                    legend:{display:false}, // REMOVED undefined legend
-                    tooltip:{enabled:true, intersect:false, mode:'index'}
+                    legend:{display:false}, 
+                    tooltip:{
+                        enabled:true, 
+                        intersect:false, 
+                        mode:'index',
+                        displayColors: false,
+                        animation: false
+                    }
                 } 
             };
             
@@ -208,19 +294,41 @@ const char index_html[] PROGMEM = R"rawliteral(
                 data:{labels:[], datasets:[{label:'HDOP', data:[], borderColor:'#bb86fc', tension:0.1, pointRadius:0, borderWidth:2, fill:true, backgroundColor:'#bb86fc22'}]}, 
                 options:{...opts, plugins:{...opts.plugins, title:{display:true, text:'PRECYZJA GPS (HDOP)', color:'#eee', font:{size:10}}}} 
             });
+
+            // Accelerometer Chart (TEST - works without GPS)
+            cAccel = new Chart(document.getElementById('c-accel'), { 
+                type:'line', 
+                data:{labels:[], datasets:[{label:'g', data:[], borderColor:'#ff9800', tension:0.1, pointRadius:0, borderWidth:2, fill:true, backgroundColor:'#ff980022'}]}, 
+                options:{...opts, plugins:{...opts.plugins, title:{display:true, text:'AKCELEROMETR (g)', color:'#eee', font:{size:10}}}} 
+            });
         }
 
         function loop() {
             if(mode === 'VIEW') return; // Don't fetch status if viewing file
             
             fetch('/api/status', { signal: AbortSignal.timeout(2000) })
-                .then(r => r.json())
+                .then(r => {
+                    if(r.status === 503) {
+                        // Busy - SD card operation likely
+                        document.getElementById('conn-state').innerText = "ZAJĘTY...";
+                        document.getElementById('conn-state').style.color = "#f1c40f"; 
+                        return null; // Skip json parsing
+                    }
+                    if(!r.ok) throw new Error("HTTP Error " + r.status);
+                    return r.json();
+                })
                 .then(d => {
+                    if(!d) return; // Skipped (Busy)
                     document.getElementById('conn-state').innerText = "POŁĄCZONO";
                     document.getElementById('conn-state').style.color = "#2ecc71";
-                    updateDash(d);
+                    try {
+                        updateDash(d);
+                    } catch(err) {
+                        console.error('updateDash error:', err, d);
+                    }
                 })
                 .catch(e => {
+                    console.error('Status fetch error:', e);
                     document.getElementById('conn-state').innerText = "ROZŁĄCZONO"; 
                     document.getElementById('conn-state').style.color = "#cf6679";
                 });
@@ -236,62 +344,137 @@ const char index_html[] PROGMEM = R"rawliteral(
             const gpsMsg = document.getElementById('gps-warn');
             const appMode = document.getElementById('app-mode');
 
-            // Hide all panels first
-            pnlIdle.style.display = 'none';
-            pnlRec.style.display = 'none';
-            pnlPaused.style.display = 'none';
+            // Hide all panels first (Safe check)
+            safeStyle('pnl-idle', 'display', 'none');
+            safeStyle('pnl-rec', 'display', 'none');
+            safeStyle('pnl-paused', 'display', 'none');
 
             if(d.state === 1) { // REC
-                pnlRec.style.display = 'grid';
-                pauseMsg.style.display = 'none';
-                appMode.innerText = "NAGRYWANIE"; appMode.className = "mode-ind btn-red";
+                safeStyle('pnl-rec', 'display', 'grid');
+                safeStyle('pause-msg', 'display', 'none');
+                if(appMode) { appMode.innerText = "NAGRYWANIE"; appMode.className = "mode-ind btn-red"; }
             } else if(d.state === 2) { // PAUSE
-                pnlPaused.style.display = 'grid';
-                pauseMsg.style.display = 'block';
-                // Adjust text for auto-pause vs manual pause logic if needed, but for now just Pause
-                appMode.innerText = "PAUZA"; appMode.className = "mode-ind btn-green";
+                safeStyle('pnl-paused', 'display', 'grid');
+                safeStyle('pause-msg', 'display', 'block');
+                if(appMode) { appMode.innerText = "PAUZA"; appMode.className = "mode-ind btn-green"; }
             } else { // IDLE
-                pnlIdle.style.display = 'grid';
-                pauseMsg.style.display = 'none';
-                appMode.innerText = "GOTOWY"; appMode.className = "mode-ind mode-live";
+                safeStyle('pnl-idle', 'display', 'grid');
+                safeStyle('pause-msg', 'display', 'none');
+                if(appMode) { appMode.innerText = "GOTOWY"; appMode.className = "mode-ind mode-live"; }
             }
 
-            document.getElementById('v-speed').innerText = d.speed.toFixed(1);
-            document.getElementById('v-alt').innerText = d.alt.toFixed(0);
-            document.getElementById('v-dist').innerText = (d.dist/1000).toFixed(2);
-            document.getElementById('v-sats').innerText = d.sats;
-            document.getElementById('v-hdop').innerText = d.hdop.toFixed(1);
-            document.getElementById('v-batt').innerText = d.batt.toFixed(2);
+            const elVSpeed = document.getElementById('v-speed');
+            if(elVSpeed) elVSpeed.innerText = (d.speed || 0).toFixed(1);
+            
+            const elVAlt = document.getElementById('v-alt');
+            if(elVAlt) elVAlt.innerText = (d.alt || 0).toFixed(0);
+            
+            const elVDist = document.getElementById('v-dist');
+            if(elVDist) elVDist.innerText = ((d.dist || 0)/1000).toFixed(2);
+            
+            const elVSats = document.getElementById('v-sats');
+            if(elVSats) elVSats.innerText = d.sats || 0;
+            
+            const elVHdop = document.getElementById('v-hdop');
+            if(elVHdop) elVHdop.innerText = (d.hdop || 0).toFixed(1);
+            
+            const elVBatt = document.getElementById('v-batt');
+            if(elVBatt) elVBatt.innerText = (d.batt || 0).toFixed(2);
 
-            if(d.lat != 0) {
-                gpsMsg.style.display = 'none';
+            // Hide Reconnect Button if Connected (Safe)
+            if(d.wifi) {
+                 safeStyle('btn-reconnect', 'display', 'none');
+            } else {
+                 safeStyle('btn-reconnect', 'display', 'inline-block');
+            }
+
+            // Always update marker position if we have GPS
+            if(d.lat && d.lat != 0) {
+                safeStyle('gps-warn', 'display', 'none');
+                
                 const ll = [d.lat, d.lon];
-                marker.setLatLng(ll);
-                if(d.state === 1) { // Only update chart/path if recording
+                if(typeof marker !== 'undefined' && marker) marker.setLatLng(ll);
+                
+                // Only add to polyline when actively RECORDING
+                if(d.state === 1 && typeof poly !== 'undefined' && poly) {
                     poly.addLatLng(ll);
-                    map.setView(ll);
-                    
-                    // Update Live Charts
-                    pushChart(cSpeed, d.speed);
-                    pushChart(cAlt, d.alt);
-                    pushChart(cHdop, d.hdop);
+                }
+                
+                // AUTO CENTER Logic
+                if(followMode && typeof map !== 'undefined' && map) {
+                   map.setView(ll);
                 }
             } else {
-                gpsMsg.style.display = 'block';
+                safeStyle('gps-warn', 'display', 'block');
             }
+
+            // UPDATE CHARTS ALWAYS (User request)
+            const accelMag = Math.sqrt((d.ax||0)*(d.ax||0) + (d.ay||0)*(d.ay||0) + (d.az||0)*(d.az||0));
+            
+            // Use elapsed time only if Recording. Otherwise use client time (undefined).
+            let timeLabelVal = undefined;
+            if(d.state === 1) {
+                timeLabelVal = d.elapsed;
+            }
+            
+            // Safety check: Re-init charts if missing
+            if(typeof cSpeed === 'undefined' || !cSpeed) {
+                console.log('Charts lost, re-init...');
+                try { initCharts(); } catch(e){}
+            }
+
+            pushChart(cSpeed, d.speed || 0, timeLabelVal);
+            pushChart(cAlt, d.alt || 0, timeLabelVal);
+            pushChart(cHdop, d.hdop || 0, timeLabelVal);
+            pushChart(cAccel, accelMag, timeLabelVal);
+        }
+        
+        function safeStyle(id, prop, val) {
+            const el = document.getElementById(id);
+            if(el) el.style[prop] = val;
         }
 
-        function pushChart(chart, val) {
-            // Keep last 60 points (approx 1 minute or more depending on updates)
-            if(chart.data.labels.length > 60) { chart.data.labels.shift(); chart.data.datasets[0].data.shift(); }
+        function pushChart(chart, val, seconds) {
+            const c = document.getElementById('debug-console');
+            if(c) {
+                c.innerHTML = txt + "<br>" + c.innerHTML.substring(0, 500);
+            }
+            console.log(txt);
+        }
+
+        function pushChart(chart, val, seconds) {
+            if(typeof chart === 'undefined' || !chart) return;
             
-            // Add simple time label (MM:SS)
-            let d = new Date();
-            let label = d.getMinutes().toString().padStart(2,'0') + ':' + d.getSeconds().toString().padStart(2,'0');
+            // Keep huge buffer (approx 2h at 1.5s interval = ~4800 points)
+            if(chart.data.labels.length > 5000) { 
+                chart.data.labels.shift(); 
+                chart.data.datasets[0].data.shift(); 
+            }
+            
+            // Format time universal: HH:MM:SS
+            let label = "00:00:00";
+            if(seconds !== undefined && seconds !== null) {
+                const secVal = parseInt(seconds);
+                const h = Math.floor(secVal / 3600);
+                const m = Math.floor((secVal % 3600) / 60);
+                const s = secVal % 60;
+                
+                const h_str = h.toString().padStart(2,'0');
+                const m_str = m.toString().padStart(2,'0');
+                const s_str = s.toString().padStart(2,'0');
+                
+                label = `${h_str}:${m_str}:${s_str}`;
+            } else {
+                // Fallback client time
+                let d = new Date();
+                label = d.getHours().toString().padStart(2,'0') + ':' +
+                        d.getMinutes().toString().padStart(2,'0') + ':' + 
+                        d.getSeconds().toString().padStart(2,'0');
+            }
             
             chart.data.labels.push(label);
-            chart.data.datasets[0].data.push(val);
-            chart.update('none'); // Optimized update mode
+            chart.data.datasets[0].data.push(parseFloat(val));
+            chart.update(); // Standard update (remove 'none' mode for reliability)
         }
 
         // CONTROL
@@ -349,9 +532,20 @@ const char index_html[] PROGMEM = R"rawliteral(
                 const lines = csv.split('\n');
                 const path = [];
                 
+                // Stats variables
+                let sumSpeed=0, countSpeed=0;
+                let sumHdop=0, countHdop=0;
+                let ascent=0, descent=0;
+                let maxAlt=-9999;
+                let lastAlt=null;
+                let totalDist=0;
+                let lastLat=null, lastLon=null;
+
                 // Reset Charts for View
                 cSpeed.data.labels = []; cSpeed.data.datasets[0].data = [];
                 cAlt.data.labels = []; cAlt.data.datasets[0].data = [];
+                cHdop.data.labels = []; cHdop.data.datasets[0].data = [];
+                cAccel.data.labels = []; cAccel.data.datasets[0].data = [];
                 
                 // Remove old start/end markers
                 if(startMarker) map.removeLayer(startMarker);
@@ -359,18 +553,81 @@ const char index_html[] PROGMEM = R"rawliteral(
 
                 lines.forEach(l => {
                    const p = l.split(',');
-                   if(p.length > 5 && !isNaN(p[1])) {
+                   // Format: millis,lat,lon,speed,alt,hdop,sats,ax,ay,az,batt
+                   if(p.length > 6 && !isNaN(p[1])) {
                        const lat = parseFloat(p[1]);
                        const lon = parseFloat(p[2]);
+                       const speed = parseFloat(p[3]);
+                       const alt = parseFloat(p[4]);
+                       const hdop = parseFloat(p[5]);
+                       
+                       // Calculate Time Label from millis (p[0])
+                       let tLbl = "";
+                       if(!isNaN(p[0])) {
+                           const tSec = Math.floor(parseFloat(p[0])/1000);
+                           const h = Math.floor(tSec / 3600);
+                           const m = Math.floor((tSec % 3600) / 60);
+                           const s = tSec % 60;
+                           tLbl = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+                       }
+
                        if(lat!=0) {
                            path.push([lat, lon]);
-                           cSpeed.data.datasets[0].data.push(parseFloat(p[3]));
-                           cSpeed.data.labels.push('');
-                           cAlt.data.datasets[0].data.push(parseFloat(p[4]));
-                           cAlt.data.labels.push('');
+                           
+                           // Charts
+                           cSpeed.data.datasets[0].data.push(speed);
+                           cSpeed.data.labels.push(tLbl);
+                           cAlt.data.datasets[0].data.push(alt);
+                           cAlt.data.labels.push(tLbl);
+                           cHdop.data.datasets[0].data.push(hdop); // HDOP
+                           cHdop.data.labels.push(tLbl);
+                           
+                           // Stats Calculation
+                           if(speed > 1.0) { // Only count moving speed > 1km/h for avg? Or all? User said "avg speed". Usually moving avg. Let's do all for simplicity or match valid points.
+                                sumSpeed += speed;
+                                countSpeed++;
+                           }
+                           
+                           // HDOP
+                           sumHdop += hdop;
+                           countHdop++;
+                           
+                           // Alt
+                           if(lastAlt !== null) {
+                               const diff = alt - lastAlt;
+                               if(diff > 0) ascent += diff;
+                               else descent += Math.abs(diff);
+                           }
+                           lastAlt = alt;
+                           if(alt > maxAlt) maxAlt = alt;
+                           
+                           // Dist
+                           if(lastLat !== null) {
+                               // Simple calc or use Leaflet
+                               try {
+                                   const d = map.distance([lastLat, lastLon], [lat, lon]);
+                                   totalDist += d;
+                               } catch(e) {}
+                           }
+                           lastLat = lat; lastLon = lon;
                        }
                    }
                 });
+                
+                // Update Review Grid
+                safeStyle('grid-live', 'display', 'none');
+                safeStyle('grid-review', 'display', 'grid');
+                
+                // Fill values
+                const avgSpeed = countSpeed > 0 ? (sumSpeed / countSpeed).toFixed(1) : "0.0";
+                const avgHdop = countHdop > 0 ? (sumHdop / countHdop).toFixed(1) : "-";
+                
+                document.getElementById('r-avg-speed').innerText = avgSpeed;
+                document.getElementById('r-dist').innerText = (totalDist/1000).toFixed(2);
+                document.getElementById('r-ascent').innerText = ascent.toFixed(0);
+                document.getElementById('r-descent').innerText = descent.toFixed(0);
+                document.getElementById('r-avg-hdop').innerText = avgHdop;
+                document.getElementById('r-max-alt').innerText = maxAlt > -9000 ? maxAlt.toFixed(0) : "0";
 
                 // Add start marker (green) and end marker (red)
                 if(path.length > 0) {
@@ -381,6 +638,7 @@ const char index_html[] PROGMEM = R"rawliteral(
                 viewPoly.setLatLngs(path);
                 cSpeed.update();
                 cAlt.update();
+                cHdop.update();
                 if(path.length) map.fitBounds(viewPoly.getBounds());
             });
         }
@@ -388,10 +646,15 @@ const char index_html[] PROGMEM = R"rawliteral(
         function exitViewer() {
             mode = 'LIVE';
             document.getElementById('view-bar').style.display = 'none';
+            
+            // Restore Grids
+            safeStyle('grid-live', 'display', 'grid');
+            safeStyle('grid-review', 'display', 'none');
+            
             viewPoly.setLatLngs([]);
             cSpeed.data.datasets[0].data = []; cSpeed.update(); // Clear view data
             cAlt.data.datasets[0].data = []; cAlt.update();
-            if(startMarker) map.removeLayer(startMarker);
+            cHdop.data.datasets[0].data = []; cHdop.update();            cAccel.data.datasets[0].data = []; cAccel.update();            if(startMarker) map.removeLayer(startMarker);
             if(endMarker) map.removeLayer(endMarker);
             loadList(); // Refresh list to get real buttons back if needed
             setTab('dash');

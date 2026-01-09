@@ -18,24 +18,91 @@
 \providecommand\HyField@AuxAddToCoFields[2]{}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Wstęp}{2}{section.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Koncepcja architektury systemu telemetrycznego}{2}{subsection.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2}Przegląd technologii i narzędzi}{2}{section.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}System globalnego pozycjonowania (GNSS)}{2}{subsection.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Magistrale komunikacyjne w systemach wbudowanych}{3}{subsection.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3}Projekt sprzętowy}{3}{section.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Szczegółowa konfiguracja interfejsów}{3}{subsection.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}System zasilania i stabilizacja}{3}{subsection.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4}Implementacja oprogramowania}{4}{section.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Bezpieczeństwo danych (Mutex)}{4}{subsection.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Struktura danych (Współdzielony Status)}{5}{subsection.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Logika sterowania (Maszyna Stanów)}{5}{subsection.4.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Interfejs WWW (Strona wbudowana w układ)}{5}{subsection.4.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Tryb głębokiego uśpienia (Deep Sleep)}{6}{subsection.4.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Filtracja błędów GPS (Auto-Pause)}{6}{subsection.4.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}Testy i analiza wyników}{6}{section.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Testy modułu GPS (Cold Start vs Hot Start)}{6}{subsection.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Stabilność zapisu danych w sytuacjach awaryjnych}{7}{subsection.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Bilans energetyczny i czas pracy}{7}{subsection.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}Podsumowanie i wnioski}{7}{section.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Osiągnięcia}{7}{subsection.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Ograniczenia i plany rozwojowe}{8}{subsection.6.2}\protected@file@percent }
-\gdef \@abspage@last{8}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Projekt sprzętowy}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Elementy układu}{2}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Konfiguracja interfejsów i połączeń}{3}{subsection.2.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Schemat elektryczny systemu}}{3}{figure.1}\protected@file@percent }
+\newlabel{fig:schemat}{{1}{3}{Schemat elektryczny systemu}{figure.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Konfiguracja magistrali I2C}}{3}{table.1}\protected@file@percent }
+\newlabel{tab:i2c}{{1}{3}{Konfiguracja magistrali I2C}{table.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Połączenie modułu GPS}}{4}{table.2}\protected@file@percent }
+\newlabel{tab:gps}{{2}{4}{Połączenie modułu GPS}{table.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Połączenie czytnika kart SD}}{4}{table.3}\protected@file@percent }
+\newlabel{tab:sd}{{3}{4}{Połączenie czytnika kart SD}{table.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Projekt obudowy}{4}{subsection.2.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Widok złożonej obudowy}}{4}{figure.2}\protected@file@percent }
+\newlabel{fig:obudowa_top}{{2}{4}{Widok złożonej obudowy}{figure.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces RWidok z góry}}{5}{figure.3}\protected@file@percent }
+\newlabel{fig:obudowa_inside}{{3}{5}{RWidok z góry}{figure.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Widok eksplodowany konstrukcji}}{5}{figure.4}\protected@file@percent }
+\newlabel{fig:obudowa_exploded}{{4}{5}{Widok eksplodowany konstrukcji}{figure.4}{}}
+\citation{botland_esp32}
+\citation{msalamon_rodziny}
+\citation{ublox_datasheet}
+\citation{sensors_edge}
+\citation{esp32_trm}
+\citation{msalamon_rodziny}
+\citation{electronics_lang}
+\citation{botland_esp32}
+\citation{wikipedia_nmea}
+\citation{geoforum_nmea}
+\citation{ublox_datasheet}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Przegląd technologii i narzędzi}{6}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Rozwój IoT i miniaturyzacja}{6}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Telemetria i przetwarzanie danych}{6}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Architektura ESP32}{6}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}System GNSS i protokół NMEA 0183}{6}{subsection.3.4}\protected@file@percent }
+\citation{elektropraktyk_nmea}
+\citation{esp32_trm}
+\citation{wonderfulpcb_protocols}
+\citation{ourpcb_i2c_spi}
+\citation{wonderfulpcb_protocols}
+\citation{ourpcb_i2c_spi}
+\citation{elektropraktyk_uart}
+\citation{esp32_trm}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Magistrale komunikacyjne w systemach wbudowanych}{7}{subsection.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Implementacja oprogramowania}{8}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Opis funkcjonalności i obsługa aplikacji}{8}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.1}Ekran główny i parametry na żywo}{8}{subsubsection.4.1.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Ekran startowy aplikacji - system gotowy do pracy}}{9}{figure.5}\protected@file@percent }
+\newlabel{fig:app_start}{{5}{9}{Ekran startowy aplikacji - system gotowy do pracy}{figure.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Trwająca sesja z rysowaną trasą}}{10}{figure.6}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Stan wstrzymania nagrywania (Pauza)}}{10}{figure.7}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Wykresy parametrów telemetrycznych}}{11}{figure.8}\protected@file@percent }
+\newlabel{fig:app_charts}{{8}{11}{Wykresy parametrów telemetrycznych}{figure.8}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.2}Zarządzanie plikami i historia tras}{11}{subsubsection.4.1.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Lista zapisanych plików}}{12}{figure.9}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Tryb podglądu historii z dodatkowymi parametrami}}{13}{figure.10}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Szczegółowa analiza wykresów w trybie przeglądania historii}}{14}{figure.11}\protected@file@percent }
+\newlabel{fig:history_charts}{{11}{14}{Szczegółowa analiza wykresów w trybie przeglądania historii}{figure.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Przykładowy wygląd ekranu OLED prezentujący status urządzenia}}{15}{figure.12}\protected@file@percent }
+\newlabel{fig:oled_screen}{{12}{15}{Przykładowy wygląd ekranu OLED prezentujący status urządzenia}{figure.12}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Szczegóły techniczne implementacji}{15}{subsection.4.2}\protected@file@percent }
+\citation{gps_comparison_2025}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Testy i analiza wyników}{16}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Testy modułu GPS (Cold Start vs Hot Start)}{16}{subsection.5.1}\protected@file@percent }
+\citation{esp32_power}
+\citation{roboticsbd_neo6m}
+\citation{bitbank_oled}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Analiza jakości śladu w ruchu}{17}{subsection.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Bilans energetyczny i czas pracy}{17}{subsection.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Podsumowanie i wnioski}{17}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Osiągnięcia}{17}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Ograniczenia i plany rozwojowe}{18}{subsection.6.2}\protected@file@percent }
+\bibcite{ublox_datasheet}{1}
+\bibcite{sensors_edge}{2}
+\bibcite{botland_esp32}{3}
+\bibcite{electronics_lang}{4}
+\bibcite{esp32_trm}{5}
+\bibcite{msalamon_rodziny}{6}
+\bibcite{wikipedia_nmea}{7}
+\bibcite{elektropraktyk_nmea}{8}
+\bibcite{geoforum_nmea}{9}
+\bibcite{elektropraktyk_uart}{10}
+\bibcite{wonderfulpcb_protocols}{11}
+\bibcite{ourpcb_i2c_spi}{12}
+\bibcite{gps_comparison_2025}{13}
+\bibcite{esp32_power}{14}
+\bibcite{roboticsbd_neo6m}{15}
+\bibcite{bitbank_oled}{16}
+\gdef \@abspage@last{19}

@@ -1,8 +1,6 @@
 \documentclass[12pt, a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-% \usepackage{polski}
-% \usepackage[polish]{babel}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{indentfirst}
@@ -28,138 +26,399 @@
 
 \section{Wstęp}
 
-Rozwój technologii Internetu Rzeczy (IoT - Internet of Things) umożliwił miniaturyzację systemów telemetrycznych, które jeszcze dekadę temu wymagałyby rozbudowanej infrastruktury sprzętowej. Celem niniejszej pracy jest zaprojektowanie i wykonanie urządzenia typu "GPS Tracker", służącego do rejestracji trasy, monitorowania parametrów ruchu oraz wizualizacji danych w czasie rzeczywistym.
+Rozwój technologii Internetu Rzeczy (IoT – Internet of Things) pozwolił na zmniejszenie systemów telemetrycznych. Jeszcze dziesięć lat temu potrzebna była duża infrastruktura sprzętowa. Celem tej pracy jest zaprojektowanie i zbudowanie urządzenia typu “GPS Tracker". Urządzenie ma rejestrować trasę, monitorować parametry ruchu i pokazywać dane w czasie rzeczywistym.
 
 Głównym założeniem projektu było stworzenie systemu autonomicznego, zasilanego bateryjnie, który łączy w sobie funkcjonalność klasycznego rejestratora danych (tzw. "czarnej skrzynki") z nowoczesnym interfejsem użytkownika dostępnym przez przeglądarkę internetową (Web Interface).
 
 \subsection{Koncepcja architektury systemu telemetrycznego}
-Głównym wyzwaniem inżynierskim przy projektowaniu przenośnych rejestratorów danych jest znalezienie kompromisu między mocą obliczeniową a zużyciem energii. W przeciwieństwie do klasycznych, pasywnych logerów zapisujących jedynie strumień danych, nowoczesne rozwiązania IoT dążą do paradygmatu \textit{Edge Computing} – przetwarzania danych bezpośrednio na urządzeniu.
+Największy problem przy tworzeniu przenośnych rejestratorów danych to znalezienie balansu między siłą obliczeń a zużyciem prądu. Stare, proste rejestratory danych tylko zapisują dane i nic więcej nie robią. Natomiast nowe rozwiązania IoT chcą przetwarzać dane tam, gdzie je zbierają, i nie potrzebują zewnętrznych serwerów. Z mojego doświadczenia widzę, że ten balans decyduje o tym, czy rejestrator będzie działał długo i dobrze.
 
-W niniejszym projekcie przyjęto założenie, że urządzenie nie tylko gromadzi surowe dane pomiarowe, ale pełni również rolę niezależnego serwera aplikacji, hostującego kompletny interfejs graficzny. Takie podejście wymusiło rezygnację z prostych mikrokontrolerów 8-bitowych na rzecz zaawansowanych układów SoC (\textit{System on Chip}).
+W niniejszym projekcie przyjęto założenie, że urządzenie nie tylko gromadzi surowe dane pomiarowe, 
+ale działa jako  niezależny serwera aplikacj i udostępnia pełny graficzny interfejs. 
+To wymusiło rezygnację z prostych mikrokontrolerów 8-bitowych na rzecz wydajniejszych jednostek obliczeniowych,
+łączących wiele funkcji (w tym bezprzewodową łączność) w jednym układzie scalonym.
 
-Do realizacji zadania wybrano platformę \textbf{ESP32}, kierując się jej unikalną architekturą dwurdzeniową. Pozwala ona na separację procesów krytycznych (obsługa przerwań GPS i IMU) od obsługi stosu sieciowego WiFi, co jest kluczowe dla zachowania ciągłości zapisu danych. Dodatkowo, wysoki stopień integracji peryferiów w jednym układzie krzemowym pozwolił zminimalizować wymiary urządzenia oraz uprościć proces montażu prototypu w warunkach laboratoryjnych.
+Do realizacji zadania wybrano platformę \textbf{ESP32}, kierując się jej unikalną architekturą dwurdzeniową.
+Pozwala ona na separację procesów krytycznych (obsługa przerwań GPS i IMU) od obsługi stosu sieciowego WiFi, 
+co jest ważne, żeby dane były zapisywane ciągle. Dodatkowo, wysoki stopień integracji  
+w jednym układzie pozwolił zminimalizować wymiary urządzenia oraz uprościć układ oraz obniżyć cene 
 
-Projekt został zrealizowany jako unikatowe rozwiązanie inżynierskie (Proof of Concept), mające na celu weryfikację możliwości budowy kompaktowego systemu telemetrycznego w oparciu o tanie i powszechnie dostępne komponenty COTS (Commercial Off-The-Shelf).
-
-\section{Przegląd technologii i narzędzi}
-
-Realizacja złożonego systemu wbudowanego wymaga integracji wielu standardów komunikacyjnych oraz zrozumienia protokołów wymiany danych. Poniżej przedstawiono kluczowe technologie wykorzystane w projekcie.
-
-\subsection{System globalnego pozycjonowania (GNSS)}
-Podstawą działania trackera jest odbiornik GPS, komunikujący się z mikrokontrolerem za pomocą protokołu tekstowego NMEA 0183. Moduł odbiorczy (w tym projekcie u-blox NEO-6M) wysła sekwencje danych, z których najważniejsze dla nawigacji są ramki:
-\begin{itemize}
-    \item \textbf{\$GPGGA} (Global Positioning System Fix Data) – zawierająca informacje o szerokości i długości geograficznej, wysokości n.p.m. oraz liczbie widocznych satelitów.
-    \item \textbf{\$GPRMC} (Recommended Minimum Specific GPS/Transit Data) – dostarczająca dane o prędkości oraz kursie przemieszczania się.
-\end{itemize}
-Dla mikrokontrolera obsługa strumienia danych NMEA jest zadaniem czasochłonnym, wymagającym ciągłego parsowania łańcuchów znaków (String Parsing), co w przypadku ESP32 realizowane jest sprzętowo i programowo z wykorzystaniem dedykowanych bibliotek.
-
-\subsection{Magistrale komunikacyjne w systemach wbudowanych}
-W projekcie wykorzystano trzy główne standardy komunikacji szeregowej, co pozwoliło na optymalne rozłożenie obciążenia i podłączenie różnorodnych peryferiów.
-
-\begin{itemize}
-    \item \textbf{I2C (Inter-Integrated Circuit):} Magistrala dwuprzewodowa (SDA - linia danych, SCL - linia zegarowa), wykorzystywana do komunikacji z urządzeniami znajdującymi się w bliskiej odległości. W projekcie na jednej szynie I2C pracują równolegle wyświetlacz OLED oraz czujnik inercyjny IMU. Rozróżnienie urządzeń następuje poprzez unikalne adresy sprzętowe (0x3C dla OLED, 0x68 dla MPU).
-    \item \textbf{SPI (Serial Peripheral Interface):} Magistrala synchroniczna o wysokiej przepustowości (Full Duplex). Została wybrana do obsługi karty pamięci SD, ponieważ zapis logów wymaga szybkiego transferu bloków danych, czego wolniejszy interfejs I2C mógłby nie zapewnić.
-    \item \textbf{UART (Universal Asynchronous Receiver-Transmitter):} Asynchroniczny port szeregowy. Wykorzystywany do komunikacji z modułem GPS. ESP32 posiada sprzętowe porty UART (Hardware Serial), co odciąża procesor od konieczności programowej emulacji transmisji (SoftwareSerial), zapewniając stabilność odbioru danych nawet przy wysokich częstotliwościach pracy.
-\end{itemize}
 
 \section{Projekt sprzętowy}
 
-Warstwa sprzętowa urządzenia została zaprojektowana w sposób modułowy, co ułatwia diagnostykę oraz ewentualną wymianę komponentów. Sercem układu jest płytka rozwojowa ESP32 DevKit V1.
 
-[Rysunek 1: Schemat blokowy połączeń systemu (ESP32 w centrum, peryferia wokół)]
+Warstwa sprzętowa urządzenia została zaprojektowana w sposób modułowy, co ułatwia diagnostykę oraz ewentualną wymianę komponentów. System składa się z następujących komponentów:
 
-\subsection{Szczegółowa konfiguracja interfejsów}
-Wszystkie moduły peryferyjne zostały połączone z mikrokontrolerem zgodnie z załączonym schematem elektrycznym.
+\subsection{Elementy układu}
 
-[Rysunek 1a: Schemat elektryczny połączeń]
+\begin{itemize}
+    \item \textbf{Mikrokontroler:} ESP32 DevKit V1 WROOM-32 – dwurdzeniowy procesor z WiFi i Bluetooth
+    \item \textbf{Moduł GPS:} NEO-6M V2 – odbiornik satelitarny (komunikacja UART)
+    \item \textbf{IMU (czujnik ruchu):} MPU6050 – akcelerometr i żyroskop 6-osiowy (I2C)
+    \item \textbf{Wyświetlacz:} OLED 0.96" – monochromatyczny ekran 128x64 px (I2C)
+    \item \textbf{Pamięć masowa:} Micro SD Card Module – czytnik kart MicroSD (SPI)
+    \item \textbf{Zasilanie:} Ładowarka Li-Ion z wejściem USB-C i zabezpieczeniami, współpracująca z ogniwem 18650. Układ umożliwia ładowanie baterii lub zasilanie systemu bezpośrednio z portu USB.
+\end{itemize}
 
-\subsection{System zasilania i stabilizacja}
-Jednym z największych wyzwań w projektach mobilnych jest zapewnienie stabilnego zasilania dla zróżnicowanych komponentów. Źródłem energii w systemie jest ogniwo litowo-jonowe typu 18650 o napięciu nominalnym 3.7V (zakres roboczy 3.0V - 4.2V).
+\subsection{Konfiguracja interfejsów i połączeń}
+Wszystkie moduły peryferyjne zostały połączone z mikrokontrolerem zgodnie z załączonym schematem elektrycznym. Kluczowym wymogiem poprawności działania układu jest połączenie wszystkich mas (GND) w jeden wspólny potencjał.
 
-Bezpośrednie zasilanie modułów z akumulatora byłoby ryzykowne ze względu na spadek napięcia w miarę rozładowywania. Moduł GPS oraz niektóre czytniki kart SD wymagają stabilnego napięcia, często w standardzie 5V. Dlatego w projekcie zastosowano przetwornicę podwyższającą napięcie (Step-Up Converter) do poziomu 5V, które następnie podawane jest na pin VIN płytki ESP32. Wbudowany w płytkę ESP32 stabilizator liniowy obniża to napięcie do bezpiecznych 3.3V dla rdzenia procesora.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{../images/schemat.jpg}
+    \caption{Schemat elektryczny systemu}
+    \label{fig:schemat}
+\end{figure}
 
-\textbf{Wspólna Masa (Common Ground):}
-Fundamentalnym wymogiem poprawności działania układu, a szczególnie magistral cyfrowych (I2C, UART, SPI), jest połączenie wszystkich mas (GND) modułów w jeden wspólny potencjał. Brak wspólnej masy prowadziłby do powstawania tzw. pętli mas oraz pływania poziomów logicznych, co uniemożliwiłoby interpretację stanów logicznych (0/1) przez mikrokontroler.
+\textbf{Magistrala I2C (OLED + MPU6050):}
+Urządzenia podłączone równolegle do wspólnych linii SDA i SCL.
 
-[Rysunek 2: Schemat ideowy sekcji zasilania]
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Urządzenie} & \textbf{Pin Modułu} & \textbf{Pin ESP32} & \textbf{Uwagi} \\
+\hline
+\textbf{OLED 0.96"} & SDA & GPIO 21 & Adres I2C: 0x3C \\
+ & SCL & GPIO 22 & \\
+ & VCC & 3.3V & Z pinu 3V3 ESP32 \\
+ & GND & GND & Wspólna masa \\
+\hline
+\textbf{MPU6050 (IMU)} & SDA & GPIO 21 & Adres I2C: 0x68 \\
+ & SCL & GPIO 22 & \\
+ & VCC & 5V & Z pinu 5V OUT power module \\
+ & GND & GND & Wspólna masa \\
+\hline
+\end{tabular}
+\caption{Konfiguracja magistrali I2C}
+\label{tab:i2c}
+\end{table}
+
+\textbf{Moduł GPS NEO-6M V2 (UART):}
+Wykorzystuje sprzętowy port szeregowy UART2.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Pin Modułu GPS} & \textbf{Pin ESP32} & \textbf{Funkcja} \\
+\hline
+TX & GPIO 16 (RX2) & Transmisja z GPS do ESP32 \\
+RX & GPIO 17 (TX2) & Konfiguracja GPS (opcjonalna) \\
+VCC & 3.3V & Z pinu 3V3 ESP32 \\
+GND & GND & Wspólna masa \\
+\hline
+\end{tabular}
+\caption{Połączenie modułu GPS}
+\label{tab:gps}
+\end{table}
+
+\textbf{Micro SD Card Module (SPI):}
+Wykorzystuje standardową magistralę VSPI.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Pin Modułu SD} & \textbf{Pin ESP32} & \textbf{Funkcja} \\
+\hline
+CS & GPIO 5 & Chip Select \\
+SCK & GPIO 18 & Zegar synchronizacji \\
+MISO & GPIO 19 & Dane (Master In, Slave Out) \\
+MOSI & GPIO 23 & Dane (Master Out, Slave In) \\
+VCC & 3.3V & Z pinu 3V3 ESP32 \\
+GND & GND & Wspólna masa \\
+\hline
+\end{tabular}
+\caption{Połączenie czytnika kart SD}
+\label{tab:sd}
+\end{table}
+
+\subsection{Projekt obudowy}
+
+Obudowa została zaprojektowana w Autodesk Inventor z przeznaczeniem do druku 3D. Składa się z podstawy,
+ ramki montażowej i pokrywy z wzorem plastra miodu. Podstawa zawiera komory na 
+ poszczególne moduły oraz schowek na ogniwo 18650. Ramka dystansowa tworzy okno
+  dostępu do ekranu i GPS. Pokrywa z ażurowym wzorem zapewnia podglad wnetrza układu.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../images/GPS_tracker.png}
+    \caption{Widok złożonej obudowy}
+    \label{fig:obudowa_top}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../images/GPS_tracke2r.png}
+    \caption{RWidok z góry}
+    \label{fig:obudowa_inside}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../images/GPS_tracker_presentation.png}
+    \caption{Widok eksplodowany konstrukcji}
+    \label{fig:obudowa_exploded}
+\end{figure}
+
+\newpage
+\section{Przegląd technologii i narzędzi}
+
+Budowa trackera GPS wymaga połączenia kilku różnych technologii komunikacyjnych. Poniżej opisano kluczowe elementy systemu wykorzystane w projekcie.
+
+\subsection{Rozwój IoT i miniaturyzacja}
+
+Internet Rzeczy (IoT) to świat połączonych urządzeń – od zegarków, przez czujniki temperatury, aż po inteligentne zamki \cite{botland_esp32, msalamon_rodziny}. Miniaturyzacja, czyli proces zmniejszania rozmiarów komponentów elektronicznych, umożliwiła budowę tak małych i wydajnych urządzeń.
+
+Moduł odbiornika GPS NEO-6M ma wymiary zaledwie 16 × 12,2 × 2,4 mm \cite{ublox_datasheet}, co pozwala zbudować kompaktowy tracker. Mniejsze układy zużywają też znacznie mniej energii – urządzenie może pracować na baterii przez wiele godzin lub dni. Integracja wielu funkcji w jednym układzie (System on Chip, w skrócie SoC) obniża koszty produkcji i zwiększa niezawodność systemu.
+
+\subsection{Telemetria i przetwarzanie danych}
+
+Telemetria to technologia zbierania danych z odległych miejsc i przesyłania ich w czasie rzeczywistym. W przypadku trackera GPS oznacza to automatyczne odczytywanie pozycji i prędkości bez potrzeby fizycznego dostępu do urządzenia.
+
+Przetwarzanie na miejscu (Edge Computing) to koncepcja, w której dane nie są od razu wysyłane do internetu, ale wstępnie analizowane bezpośrednio w urządzeniu \cite{sensors_edge}. Mikrokontroler ESP32 odbiera surowe dane z modułu GPS, przetwarza je – rozpoznaje współrzędne, oblicza prędkość – i zapisuje gotowe wyniki na karcie pamięci. 
+
+Dlaczego to ważne? Po pierwsze, oszczędza to energię baterii – zamiast ciągle wysyłać dane przez sieć (co zużywa dużo prądu), urządzenie analizuje je lokalnie i wysyła tylko niezbędne informacje. Po drugie, zwiększa to szybkość reakcji – decyzje podejmowane są natychmiast, bez czekania na odpowiedź z serwera.
+
+\subsection{Architektura ESP32}
+
+ESP32 to mikrokontroler firmy Espressif Systems, który posiada dwa niezależne rdzenie procesora Xtensa LX6 pracujące z częstotliwością do 240 MHz \cite{esp32_trm, msalamon_rodziny}. W praktyce oznacza to, że może wykonywać dwa zadania jednocześnie, bez wzajemnego spowalniania się.
+
+Jak to działa? Jeden rdzeń może zajmować się obliczeniami – odbieraniem danych GPS, zapisywaniem ich na kartę pamięci, wyświetlaniem informacji na ekranie \cite{electronics_lang}. W tym samym czasie drugi rdzeń obsługuje komunikację bezprzewodową – Wi-Fi lub Bluetooth. Dzięki temu oba procesy działają płynnie i nie przeszkadzają sobie nawzajem.
+
+ESP32 posiada także wbudowane moduły Wi-Fi i Bluetooth, co czyni go idealnym rozwiązaniem dla projektów wymagających bezprzewodowej komunikacji \cite{botland_esp32}. Dodatkowo, układ obsługuje zaawansowane tryby oszczędzania energii – może automatycznie "zasypiać" gdy nie wykonuje zadań, pobierając mniej niż 10 mikroamperów prądu.
+
+\subsection{System GNSS i protokół NMEA 0183}
+
+Odbiornik GPS komunikuje się z mikrokontrolerem za pomocą protokołu NMEA 0183 – standardu opracowanego przez National Marine Electronics Association, używanego w nawigacji morskiej i lądowej \cite{wikipedia_nmea, geoforum_nmea}. Jest to protokół tekstowy, w którym dane przesyłane są w postaci czytelnych dla człowieka zdań ASCII.
+
+Moduł u-blox NEO-6M wysyła dane przez port szeregowy z prędkością 9600 bitów na sekundę \cite{ublox_datasheet}. Dane te mają postać tekstowych linii rozpoczynających się od znaku dolara (\$), zawierających kod identyfikacyjny oraz pola oddzielone przecinkami.
+
+Najważniejsze typy ramek wykorzystywane w projekcie to:
+
+\begin{itemize}
+    \item \textbf{\$GPGGA} – zawiera podstawowe dane o pozycji: szerokość geograficzną, długość geograficzną, wysokość nad poziomem morza oraz liczbę widocznych satelitów. To te informacje, które odpowiadają na pytanie "gdzie jestem?" \cite{elektropraktyk_nmea}.
+    \item \textbf{\$GPRMC} – dostarcza dane o ruchu: prędkość przemieszczania się oraz kierunek jazdy (kurs). Dzięki tym danym można wyświetlić strzałkę wskazującą kierunek poruszania się.
+\end{itemize}
+
+ESP32 posiada sprzętowe porty UART, które automatycznie odbierają dane w tle \cite{esp32_trm}. Oznacza to, że procesor nie musi ciągle sprawdzać, czy nadeszły nowe dane – specjalny układ UART robi to automatycznie i informuje procesor, gdy cała ramka została odebrana. To znacznie odciąża główny procesor i zapewnia stabilność działania.
+
+\subsection{Magistrale komunikacyjne w systemach wbudowanych}
+
+W projekcie wykorzystano trzy różne standardy komunikacji, każdy wybrany do konkretnego zadania:
+
+\textbf{I2C (Inter-Integrated Circuit)} to magistrala, która wykorzystuje tylko dwa przewody: jeden do przesyłania danych (SDA), drugi do synchronizacji czasowej (SCL) \cite{wonderfulpcb_protocols}. Największą zaletą I2C jest możliwość podłączenia wielu urządzeń do tych samych dwóch przewodów – każde urządzenie ma swój unikalny adres i reaguje tylko na komunikaty skierowane do niego.
+
+W trackerze na jednej magistrali I2C pracują jednocześnie wyświetlacz OLED oraz czujnik ruchu IMU. Mikrokontroler rozróżnia je po adresach. I2C jest idealne dla urządzeń znajdujących się blisko siebie, które nie wymagają bardzo szybkiego przesyłu danych – typowa prędkość to do 400 tysięcy bitów na sekundę, co w zupełności wystarcza dla wyświetlaczy i czujników \cite{ourpcb_i2c_spi}.
+
+\vspace{0.5cm}
+\textbf{SPI (Serial Peripheral Interface)} to magistrala synchroniczna zaprojektowana do szybkiego przesyłu danych. Wykorzystuje cztery linie komunikacyjne i może przesyłać dane jednocześnie w obu kierunkach (tzw. komunikacja dwukierunkowa) \cite{wonderfulpcb_protocols}.
+
+SPI zostało wybrane do obsługi karty pamięci SD, ponieważ zapis danych wymaga szybkiego transferu – karta SD może przyjmować dane z prędkością kilku do kilkudziesięciu megabitów na sekundę \cite{ourpcb_i2c_spi}. To znacznie szybciej niż I2C, dlatego dla karty pamięci jest to najlepszy wybór.
+
+\vspace{0.5cm}
+\textbf{UART (Universal Asynchronous Receiver-Transmitter)} to port szeregowy wykorzystujący dwa przewody: jeden do wysyłania danych (TX), drugi do odbierania (RX) \cite{elektropraktyk_uart}. Komunikacja odbywa się bez wspólnej linii zegarowej – oba urządzenia muszą być po prostu skonfigurowane na tę samą prędkość transmisji.
+
+W projekcie UART obsługuje moduł GPS. ESP32 posiada sprzętowe porty UART, co oznacza, że odbiór danych odbywa się automatycznie przez dedykowany układ elektroniczny \cite{esp32_trm}. Procesor nie musi ciągle sprawdzać, czy nadeszły nowe dane – układ sam go powiadomi. To zapewnia stabilność odbioru danych nawet przy intensywnej pracy procesora.
+
+UART jest prosty, niezawodny i działa nawet na większych odległościach (przy odpowiednio niższych prędkościach). Jest idealny dla urządzeń, które wymagają prostego, dwukierunkowego połączenia między dwoma urządzeniami.
 
 \section{Implementacja oprogramowania}
 
-Oprogramowanie układowe (Firmware) zostało napisane w języku C++. Zdecydowano się na wykorzystanie środowiska PlatformIO, które znacznie ułatwia zarządzanie zewnętrznymi bibliotekami w porównaniu do standardowego Arduino IDE.
+\subsection{Opis funkcjonalności i obsługa aplikacji}
+Aplikacja webowa stanowi główne centrum sterowania urządzeniem. Poniżej przedstawiono szczegółowy opis interfejsu oraz dostępnych funkcji, które zostały zaimplementowane w celu zapewnienia intuicyjnej obsługi.
 
-Kod programu jest strukturą wielowątkową, co oznacza, że procesor wykonuje kilka zadań "jednocześnie" (w praktyce szybko się między nimi przełącza lub wykonuje je na dwóch rdzeniach). Wyróżniamy dwie główne sfery działania:
+\subsubsection{Ekran główny i parametry na żywo}
+
+Po nawiązaniu połączenia z siecią Wi-Fi urządzenia, w prawym górnym rogu aplikacji widoczny jest status "POŁĄCZONO". W przypadku utraty zasięgu lub zerwania połączenia, komunikat natychmiast zmienia się na "ROZŁĄCZONO", informując użytkownika o braku aktualnej synchronizacji danych.
+
+Ekran główny został podzielony na dwie sekcje logiczne: mapę z aktualną pozycją (wykorzystującą bibliotekę Leaflet) oraz panel parametrów telemetrycznych.
+
+Na panelu dolnym wyświetlane są kluczowe parametry odświeżane w czasie rzeczywistym:
+\begin{itemize}
+    \item \textbf{Prędkość:} Aktualna prędkość przemieszczania się wyrażona w km/h.
+    \item \textbf{Wysokość:} Wysokość nad poziomem morza w metrach.
+    \item \textbf{Dystans:} Całkowita długość trasy przebyta w bieżącej sesji.
+    \item \textbf{Satelity:} Liczba widocznych i używanych do nawigacji satelitów, co pozwala ocenić jakość "fixa".
+    \item \textbf{HDOP:} Parametr precyzji geometrycznej (im niższy, tym lepiej).
+    \item \textbf{Bateria:} Napięcie ogniwa zasilającego, pozwalające monitorować stan naładowania.
+\end{itemize}
+
+W sytuacji, gdy urządzenie nie posiada jeszcze ustalonej pozycji GPS (np. zaraz po włączeniu wewnątrz budynku), na ekranie widnieje wyraźny komunikat o szukaniu sygnału GPS.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{../images/Screenshot_20260109_143942_Chrome.jpg}
+    \caption{Ekran startowy aplikacji - system gotowy do pracy}
+    \label{fig:app_start}
+\end{figure}
+
+\textbf{Proces nagrywania trasy}
+
+Sterowanie procesem rejestracji odbywa się za pomocą centralnego przycisku \textbf{"START"}. Rozpoczęcie nagrywania aktywuje rysowanie śladu na mapie oraz zliczanie statystyk sesji. Aplikacja udostępnia również funkcję centrowania mapy – specjalny przycisk pozwala jednym kliknięciem przywrócić widok na aktualną pozycję GPS, co jest przydatne po ręcznym przesuwaniu mapy w celu podejrzenia okolicy.
+
+System obsługuje zaawansowane funkcje pauzowania:
+\begin{itemize}
+    \item \textbf{Pauza manualna:} Użytkownik może w każdej chwili ręcznie wstrzymać zapis przyciskiem "PAUZA".
+    \item \textbf{Auto-Pauza:} System automatycznie wykrywa brak ruchu i wstrzymuje zapis, co jest sygnalizowane pomarańczowym komunikatem "PAUZA / AUTO-PAUZA" na mapie. Zapobiega to rejestrowaniu błędnych punktów podczas postojów.
+\end{itemize}
+
+Po zakończeniu aktywności użytkownik ma do wyboru trzy opcje:
 \begin{enumerate}
-    \item \textbf{Rdzeń Logiczny:} Zajmuje się "brudną robotą" - ciągle pyta GPS o pozycję, sprawdza czujniki ruchu i zapisuje wszystko na kartę pamięci. To dzieje się w głównej pętli programu (funkcja \texttt{loop}).
-    \item \textbf{Rdzeń Komunikacyjny:} Odpowiada za obsługę WiFi i strony internetowej. Kiedy użytkownik klika przycisk w telefonie, to właśnie ten wątek reaguje.
+    \item \textbf{WZNÓW:} Powrót do nagrywania w ramach tej samej sesji.
+    \item \textbf{ZAPISZ:} Trwałe zapisanie zgromadzonych danych do pliku w pamięci urządzenia.
+    \item \textbf{ODRZUĆ:} Anulowanie sesji i usunięcie tymczasowych danych bez zapisu.
 \end{enumerate}
 
-\subsection{Bezpieczeństwo danych (Mutex)}
-Największym wyzwaniem przy dwóch działających równolegle wątkach jest dostęp do wspólnych zasobów, takich jak karta SD. Wyobraźmy sobie sytuację, w której wątek logiczny próbuje zapisać współrzędne trasy, a w tym samym ułamku sekundy wątek internetowy chce odczytać listę plików, by wyświetlić ją na ekranie telefonu. Bez odpowiedniego nadzoru mogłoby to doprowadzić do pomieszania danych i uszkodzenia plików.
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{../images/Screenshot_20260109_144825_Chrome.jpg}
+        \caption{Trwająca sesja z rysowaną trasą}
+    \end{minipage}\hfill
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{../images/Screenshot_20260109_144835_Chrome.jpg}
+        \caption{Stan wstrzymania nagrywania (Pauza)}
+    \end{minipage}
+\end{figure}
 
-Rozwiązaniem jest zastosowanie tzw. **Mutexu** (od ang. \textit{Mutual Exclusion} - Wzajemne Wykluczanie). Działa on jak klucz do toalety w pociągu - w danym momencie tylko jedna osoba (wątek) może z niej korzystać. Jeśli wątek zapisujący dane "weźmie klucz" (wywoła funkcję \texttt{xSemaphoreTake}), drugi wątek musi grzecznie poczekać w kolejce, aż klucz zostanie zwrócony (\texttt{xSemaphoreGive}).
+\textbf{Wykresy i analiza trendów}
 
-W kodzie wygląda to następująco:
-\begin{verbatim}
-// Czekaj na dostęp do karty SD (maksymalnie 10ms)
-if(xSemaphoreTake(sdMutex, ...) == true) {
-    // Teraz mamy wyłączność! Możemy bezpiecznie czytać/pisać.
-    zapiszDaneNaKarte();
-    
-    // Koniec pracy, oddajemy klucz innym.
-    xSemaphoreGive(sdMutex);
-}
-\end{verbatim}
-Dzięki temu mechanizmowi mamy 100\% pewności, że dane na karcie się nie uszkodzą, nawet przy intensywnej pracy urządzenia.
-
-\subsection{Struktura danych (Współdzielony Status)}
-Aby wątek internetowy wiedział, co aktualnie dzieje się z urządzeniem (np. jaka jest prędkość), musi "podglądać" zmienne z wątku głównego. Aby uniknąć sytuacji, w której odczytamy "starą" szerokość geograficzną i "nową" długość (co dałoby błędną pozycję), wszystkie kluczowe dane zostały zgrupowane w jeden "kontener" (strukturę):
-
-\begin{verbatim}
-struct TrackerStatus {
-    double latitude;  // Szerokość geog.
-    double longitude; // Długość geog.
-    float speed;      // Prędkość
-    float battery;    // Napięcie baterii
-    // ... inne parametry
-} sharedStatus;
-\end{verbatim}
-Aktualizacja tego kontenera również jest chroniona wspomnianym wcześniej kluczem (Mutexem), więc serwer WWW zawsze pobiera kompletny i spójny zestaw danych.
-
-\subsection{Logika sterowania (Maszyna Stanów)}
-Zamiast pisać skomplikowane warunki "jeśli to i tamto", program został podzielony na jasne tryby pracy, podobnie jak w magnetowidzie. Nazywamy to **Maszyną Stanów**.
-Urządzenie zawsze znajduje się w jednym z trzech stanów:
+Dla bardziej wnikliwej analizy aktywności, aplikacja udostępnia sekcję wykresów rysowanych na żywo. Pozwala to na bieżąco śledzić historię parametrów:
 \begin{itemize}
-    \item \textbf{IDLE (Czuwanie):} Urządzenie jest włączone, łapie sygnał GPS, można połączyć się z nim przez WiFi, ale nie zapisuje trasy na kartę SD. Dioda statusowa (jeśli jest) mruga powoli.
-    \item \textbf{RECORDING (Nagrywanie):} Użytkownik wcisnął "START". Każdy nowy punkt GPS jest dopisywany do pliku na karcie.
-    \item \textbf{PAUSED (Pauza):} Nagrywanie wstrzymane (ręcznie lub automatycznie na postoju). Plik jest otwarty, ale system czeka na ruch. Co ważne, w momencie przejścia w pauzę, wszystkie dane z pamięci podręcznej są natychmiast zrzucane na kartę ("Flush"), aby nie zginęły w razie wyłączenia prądu.
+    \item Profil prędkości w czasie.
+    \item Profil wysokości n.p.m.
+    \item Wykres precyzji GPS (HDOP).
+    \item Odczyty z akcelerometru (siły przeciążeń).
 \end{itemize}
 
-\subsection{Interfejs WWW (Strona wbudowana w układ)}
-Unikalną cechą tego projektu jest to, że nie potrzebuje on żadnej zewnętrznej aplikacji na telefon. Cała strona internetowa (HTML, wygląd CSS i skrypty) jest zapisana w pamięci samego procesora ESP32.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{../images/Screenshot_20260109_144831_Chrome.jpg}
+    \caption{Wykresy parametrów telemetrycznych}
+    \label{fig:app_charts}
+\end{figure}
 
-Zastosowano tu podejście tzw. **Single Page Application (SPA)**. Oznacza to, że telefon pobiera stronę tylko raz - na samym początku. Potem, zamiast przeładowywać całą stronę co sekundę (co by "zamuliło" wolne łącze), strona wysyła w tle tylko małe zapytania o dane (technologia AJAX).
-Procesor odpowiada krótkim tekstem w formacie JSON, np.:
-\texttt{\{ "speed": 15.2, "batt": 4.1 \}}
+\subsubsection{Zarządzanie plikami i historia tras}
 
-Telefon (przeglądarka) odbiera te liczby i sama rysuje wykresy oraz przesuwa kropkę na mapie. To genialne posunięcie, bo przesuwa ciężką pracę (rysowanie grafiki) z małego procesora ESP32 na potężny procesor smartfona.
+Druga zakładka interfejsu, "PLIKI / HISTORIA", dedykowana jest zarządzaniu danymi zgromadzonymi na karcie SD. Użytkownik otrzymuje pełną kontrolę nad archiwum tras bez konieczności wyjmowania karty z urządzenia.
 
-\subsection{Tryb głębokiego uśpienia (Deep Sleep)}
-Mimo zastosowania wydajnego akumulatora, kluczowym aspektem każdego urządzenia przenośnego jest maksymalizacja czasu pracy. W tym celu zaimplementowano funkcję \textbf{Deep Sleep} (Głębokiego Uśpienia).
-
-Jest to specjalny tryb pracy mikrokontrolera ESP32, w którym wyłączana jest większość jego modułów wewnętrznych:
+Dostępne funkcjonalności obejmują:
 \begin{itemize}
-    \item Wyłączane jest całe radio WiFi oraz Bluetooth (największy pożeracz energii).
-    \item Zatrzymywane są oba rdzenie procesora (CPU).
-    \item Wyłączany jest kontroler pamięci Flash.
-    \item Zgaszony zostaje wyświetlacz OLED.
+    \item \textbf{Odświeżanie listy:} Pobranie aktualnego wykazu plików z karty SD.
+    \item \textbf{Pobieranie:} Transfer wybranego pliku .csv/.txt bezpośrednio do pamięci telefonu/komputera.
+    \item \textbf{Usuwanie:} Trwałe usunięcie niepotrzebnych plików.
+    \item \textbf{Podgląd:} Specjalny tryb wizualizacji archiwalnej sesji.
 \end{itemize}
 
-Jedynym elementem, który pozostaje aktywny, jest szczątkowy procesor (ULP - Ultra Low Power Coprocessor) oraz kontroler RTC (Zegar Czasu Rzeczywistego), który pobiera śladowe ilości prądu rzędu kilku-kilkunastu mikroamperów ($\mu A$).
-W tym projekcie wybudzenie następuje poprzez sygnał sprzętowy (przycisk RESET), co przywraca pełną funkcjonalność w ciągu ułamka sekundy. Pozwala to na drastyczne oszczędzanie energii, gdy tracker nie jest używany, bez konieczności odłączania baterii.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{../images/Screenshot_20260109_150502_Chrome.jpg}
+    \caption{Lista zapisanych plików}
+\end{figure}
 
-\subsection{Filtracja błędów GPS (Auto-Pause)}
-Tanie moduły GPS mają to do siebie, że nawet gdy leżą nieruchomo na biurku, potrafią pokazywać, że "pełzają" z prędkością 0.5-1 km/h (tzw. dryft). Aby trasa na mapie nie wyglądała jak kłębek wełny w miejscu postoju, zaimplementowano logiczny filtr:
-Jeśli prędkość spadnie poniżej 2 km/h na dłużej niż 5 sekund, system uznaje, że stoimy i przestaje zapisywać punkty. Wznowi zapis dopiero, gdy ruszymy szybciej.
+W trybie \textbf{podglądu pliku} interfejs prezentuje kompletny ślad trasy na mapie oraz rozszerzony zestaw statystyk, niedostępnych w trybie na żywo, takich jak:
+\begin{itemize}
+    \item \textbf{Średnia prędkość:} Wartość wyliczona dla całej trasy, z uwzględnieniem postojów (auto-pauza).
+    \item \textbf{Suma wzniosów i spadków:} Łączna różnica wysokości pokonana podczas sesji.
+    \item \textbf{Maksymalna wysokość:} Najwyższy punkt osiagnięty na trasie (max AMSL).
+    \item \textbf{Dystans:} Całkowita długość trasy.
+    \item \textbf{Średnie HDOP:} Średnia wartość precyzji pomiaru z całego zapisu, pozwalająca ocenić wiarygodność danych.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{../images/Screenshot_20260109_145718_Chrome.jpg}
+    \caption{Tryb podglądu historii z dodatkowymi parametrami}
+\end{figure}
+
+Dodatkowo, w trybie podglądu użytkownik ma dostęp do szczegółowych wykresów analizujących przebieg całej trasy. Są to te same wykresy co w trybie na żywo (prędkość, wysokość, HDOP), ale przedstawiające kompletne dane z całego nagrania, co pozwala na łatwą identyfikację kluczowych momentów wycieczki.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{../images/Screenshot_20260109_151924_Chrome.jpg}
+    \caption{Szczegółowa analiza wykresów w trybie przeglądania historii}
+    \label{fig:history_charts}
+\end{figure}
+
+Dane zapisywane są na karcie SD w formacie CSV (Comma Separated Values), co umożliwia ich łatwy import do arkuszy kalkulacyjnych (np. Excel) lub specjalistycznego oprogramowania GIS. Każda linia w pliku odpowiada jednemu punktowi pomiarowemu i zawiera następujące pola, oddzielone przecinkami:
+\begin{itemize}
+    \item \textbf{Czas (ms):} Czas systemowy w milisekundach od uruchomienia urządzenia.
+    \item \textbf{Szerokość i Długość geograficzna:} Współrzędne GPS (format dziesiętny).
+    \item \textbf{Prędkość (km/h):} Chwilowa prędkość ruchu.
+    \item \textbf{Wysokość (m n.p.m.):} Wysokość nad poziomem morza.
+    \item \textbf{HDOP:} Precyzja pomiaru poziomego (im mniejsza wartość, tym lepiej).
+    \item \textbf{Satelity:} Liczba widocznych satelitów użytych do ustalenia pozycji.
+    \item \textbf{Akcelerometr (ax, ay, az):} Surowe dane z czujnika przeciążeń dla trzech osi.
+    \item \textbf{Bateria (V):} Napięcie zasilania w momencie pomiaru.
+\end{itemize}
+
+Przykładowa struktura linii danych:
+\begin{verbatim}
+millis,lat,lon,speed,alt,hdop,sats,ax,ay,az,batt
+34500,52.2297,21.0122,15.5,112.4,1.2,8,0.02,-0.98,0.15,4.12
+\end{verbatim}
+
+\textbf{Integracja z wyświetlaczem OLED}
+
+Niezależnie od aplikacji mobilnej, urządzenie wyposażone jest w fizyczny ekran OLED. Pełni on funkcję pomocniczą, prezentując najważniejsze informacje w zwięzłej formie:
+\begin{itemize}
+    \item Aktualny status: Oczekiwanie / Nagrywanie / Pauza.
+    \item Liczba widocznych satelitów (ikona "SAT").
+    \item Bieżąca prędkość oraz przebyty dystans.
+    \item Adres IP oraz nazwa sieci WiFi (SSID) w celu ułatwienia połączenia.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../images/20260109_150650.jpg}
+    \caption{Przykładowy wygląd ekranu OLED prezentujący status urządzenia}
+    \label{fig:oled_screen}
+\end{figure}
+
+\subsection{Szczegóły techniczne implementacji}
+
+\textbf{Architektura wielowątkowa}
+
+Oprogramowanie zostało zrealizowane w środowisku PlatformIO (C++) na układzie ESP32, który posiada dwa rdzenie. Pozwoliło to na podział zadań:
+\begin{itemize}
+    \item \textbf{Rdzeń 0 (Komunikacyjny):} Obsługuje WiFi i serwer strony internetowej. Dzięki temu, gdy użytkownik przegląda mapę na telefonie, nie obciąża to głównego procesu zapisu.
+    \item \textbf{Rdzeń 1 (Logiczny):} Zajmuje się tylko tym, co najważniejsze - odbieraniem danych z GPS i zapisywaniem ich na kartę.
+\end{itemize}
+
+\vspace{0.5cm}
+\textbf{Bezpieczeństwo i wielozadaniowość (Mutex)}
+
+Aby dwa rdzenie nie próbowały jednocześnie pisać na tę samą kartę SD (co mogłoby ją uszkodzić), zastosowano mechanizm Mutex. Działa on jak cyfrowy "klucz" - tylko jeden proces może mieć do niego dostęp w danym momencie. Jeśli WiFi chce odczytać plik, musi poczekać, aż GPS skończy zapamiętywać pozycję.
+
+\vspace{0.5cm}
+\textbf{Logika sterowania (Maszyna Stanów)}
+
+System działa w trzech, ściśle określonych trybach, co zapobiega błędom:
+\begin{itemize}
+    \item \textbf{IDLE (Czuwanie):} Urządzenie działa i pokazuje dane, ale nie zapisuje plików.
+    \item \textbf{RECORDING (Nagrywanie):} Główny tryb wycieczkowy - dane są zapisywane na kartę.
+    \item \textbf{PAUSED (Pauza):} Wstrzymanie zapisu. Ważne jest to, że przejście w tryb pauzy wymusza "zrzut" (Flush) wszystkich danych na kartę, więc nagłe wyłączenie urządzenia nie spowoduje utraty ostatniego fragmentu trasy.
+\end{itemize}
+
+\vspace{0.5cm}
+\textbf{Interfejs WWW (SPA)}
+
+Strona internetowa ładuje się z pamięci urządzenia tylko raz. Potem telefon pobiera w tle już tylko same liczby (prędkość, pozycję). Dzięki temu interfejs działa płynnie nawet na słabszym zasięgu, a bateria trackera jest oszczędzana.
+
+\vspace{0.5cm}
+\textbf{Bezpieczeństwo Zapisu}
+
+Dane zbierane są w pamięci RAM, a na kartę SD zrzucane są w większych paczkach co 10 sekund. Chroni to kartę przed zużyciem, a nazwy plików tworzone są automatycznie z daty i godziny.
+
+\vspace{0.5cm}
+\textbf{Stabilność i Watchdog}
+
+System ignoruje "pływanie" GPS na postoju (Filtr Histerezowy). Dodatkowo, funkcja "Watchdog" restertuje moduł WiFi w razie problemów z połączeniem, nie przerywając przy tym nagrywania trasy.
+
 \section{Testy i analiza wyników}
 
 W celu weryfikacji założeń projektowych przeprowadzono serię testów sprawdzających niezawodność urządzenia w warunkach rzeczywistych. Skupiono się na trzech krytycznych aspektach: czasie akwizycji sygnału GPS, odporności na błędy zapisu oraz wydajności energetycznej.
@@ -168,34 +427,34 @@ W celu weryfikacji założeń projektowych przeprowadzono serię testów sprawdz
 Jednym z kluczowych parametrów użytkowych lokalizatora jest czas oczekiwania na ustalenie pierwszej pozycji (Time To First Fix - TTFF). Procedura testowa obejmowała uruchomienie urządzenia w otwartej przestrzeni po długim okresie nieaktywności (powyżej 4 godzin).
 
 \begin{itemize}
-    \item \textbf{Zimny start (Cold Start):} Moduł nie posiada aktualnych danych almanachu ani efemeryd. Zaobserwowane czasy oczekiwania wynosiły od 45 sekund do nawet 15 minut w trudnych warunkach (np. gęsta zabudowa). Jest to zachowanie typowe dla modułów klasy NEO-6M bez podtrzymania bateryjnego pamięci backup.
-    \item \textbf{Gorący start (Hot Start):} Po krótkim zaniku zasilania (poniżej 30 minut) moduł odzyskuje fix niemal natychmiastowo (zazwyczaj poniżej 5 sekund), co potwierdza poprawność działania układu zasilania.
+    \item \textbf{Cold Start (Zimny start):} Moduł uruchamia się "na ślepo" - nie wie, gdzie się znajduje,
+     ani gdzie na niebie szukać satelitów. Musi dopiero pobrać te dane z sygnału GPS. 
+     aobserwowane czasy oczekiwania wynosiły od 1 do 5 minut.  
+    \item \textbf{Hot Start:} Po krótkim zaniku zasilania (poniżej 30 minut) moduł odzyskuje fix niemal natychmiastowo (zazwyczaj poniżej 5 sekund), co potwierdza poprawność działania układu zasilania.
 \end{itemize}
 
-[Tutaj należy wstawić tabelę z pomiarami czasu startu w 5-10 próbach]
+Jak wskazują badania porównawcze \cite{gps_comparison_2025}, moduł NEO-6M, mimo bycia rozwiązaniem budżetowym, oferuje dokładność porównywalną do droższych sensorów (np. Walksnail WS-M181). Głównymi wadami wymienianymi w literaturze, a potwierdzonymi w niniejszym projekcie, są długi czas zimnego startu (wyszukiwania satelitów) oraz niższa częstotliwość odświeżania. Jednakże, jak zauważają autorzy badania, wady te nie są krytyczne w typowych zastosowaniach amatorskich i przy pomiarach w punktach statycznych.
 
-\subsection{Stabilność zapisu danych w sytuacjach awaryjnych}
-Symulowano awarię nośnika danych poprzez wyjęcie karty SD w trakcie trwania aktywnej sesji nagrywania (stan RECORDING).
-Oczekiwane zachowanie systemu:
-\begin{enumerate}
-    \item Wykrycie błędu zapisu przez funkcję biblioteczną \texttt{SD.open()}.
-    \item Zalogowanie błędu na porcie szeregowym.
-    \item Kontynuacja pracy pozostałych modułów (wyświetlanie danych na OLED i stronie WWW) pomimo braku możliwości archiwizacji.
-\end{enumerate}
-Testy potwierdziły, że dzięki zastosowaniu mechanizmów obsługi wyjątków (try-catch lub sprawdzeń warunkowych \texttt{if(!file)}), awaria karty SD nie powoduje zawieszenia całego mikrokontrolera (Kernel Panic), a jedynie wstrzymanie funkcji rejestrującej.
+\subsection{Analiza jakości śladu w ruchu}
+Testy wykazały, że o ile w warunkach statycznych moduł radzi sobie bardzo dobrze, to podczas aktywności dynamicznych (np. bieg) lub przy okresowym przesłanianiu anteny, jakość sygnału zauważalnie spada.
+
+W momentach, gdy antena jest zasłaniana (np. przez ciało biegacza lub gęste korony drzew), na mapie mogą pojawiać się nieprawdziwe trasy (artefakty), odbiegające od rzeczywistego toru poruszania się. Towarzyszą temu również błędne odczyty prędkości chwilowej. Jest to zjawisko wynikające z chwilowej utraty widoczności satelitów i jest typowe dla odbiorników GPS tej klasy bez wspomagania systemami inercyjnymi.
 
 \subsection{Bilans energetyczny i czas pracy}
-Urządzenie zasilane jest ogniwem Li-Ion 18650 o pojemności nominalnej (wstawić pojemność, np. 2600 mAh).
+Urządzenie zasilane jest ogniwem Li-Ion 18650 o pojemności nominalnej 2600 mAh.
 Szacunkowy pobór prądu przez poszczególne moduły:
 \begin{itemize}
-    \item ESP32 (z WiFi w trybie AP+STA): ok. 150-200 mA
-    \item Moduł GPS: ok. 40 mA
-    \item OLED i czujniki: ok. 10-15 mA
+    \item ESP32 (z WiFi w trybie AP+STA): ok. 150-200 mA \cite{esp32_power}
+    \item Moduł GPS: ok. 40 mA \cite{roboticsbd_neo6m}
+    \item OLED i czujniki: ok. 10-15 mA \cite{bitbank_oled}
 \end{itemize}
-Łączny pobór prądu oscyluje w granicach 250 mA. Teoretyczny czas pracy wynosi zatem $T = \frac{2600 mAh}{250 mA} \approx 10.4 h$.
-W praktyce, uwzględniając sprawność przetwornicy Step-Up (ok. 85-90\%), realny czas pracy wynosi około 8-9 godzin, co jest wynikiem satysfakcjonującym dla jednodniowej wycieczki rowerowej lub pieszego monitoringu.
+Łączny pobór prądu oscyluje w granicach 250 mA. Uwzględniając sprawność przetwornicy Step-Up (ok. 85\%), realny czas pracy wynosi:
+\[
+T \approx \frac{2600 mAh}{250 mA} \cdot 0.85 \approx 8.8 h
+\]
+Jest to wynik satysfakcjonujący dla jednodniowej wycieczki rowerowej lub pieszego monitoringu.
 
-[W tym miejscu sugerowane wstawienie wykresu napięcia baterii w czasie podczas testu rozładowania]
+
 
 \section{Podsumowanie i wnioski}
 
@@ -213,10 +472,62 @@ Względem pierwotnych prototypów, obecna wersja urządzenia charakteryzuje się
 Obecna rewizja urządzenia posiada pewne ograniczenia, które wyznaczają kierunki dalszych prac rozwojowych:
 \begin{enumerate}
     \item \textbf{Brak łączności globalnej:} Urządzenie wymaga połączenia WiFi z telefonem użytkownika. Dodanie modułu GSM (np. SIM800L) pozwoliłoby na wysyłanie pozycji do chmury niezależnie od obecności operatora.
-    \item \textbf{Zarządzanie energią:} Obecny kod nie wykorzystuje trybów uśpienia (Light/Deep Sleep). W przyszłości planowane jest wprowadzenie algorytmu usypiania ESP32 podczas długich postojów, co mogłoby wydłużyć czas pracy na baterii nawet dwukrotnie.
-    \item \textbf{Obudowa:} Projekt wymaga zaprojektowania dedykowanej obudowy (np. w technologii druku 3D) zapewniającej ochronę przed wilgocią (klasa szczelności IP54), co jest kluczowe w zastosowaniach outdoorowych.
+   
 \end{enumerate}
 
 Podsumowując, zaprojektowany system stanowi solidną bazę do dalszego rozwoju systemów IoT przeznaczonych do monitoringu floty i aktywności fizycznej.
+
+\newpage
+\begin{thebibliography}{99}
+
+\bibitem{ublox_datasheet}
+u-blox AG. \textit{NEO-6 u-blox 6 GPS Modules – Data Sheet} (GPS.G6-HW-09005). 2011.
+
+\bibitem{sensors_edge}
+Design and Implementation of ESP32-Based Edge Computing for Object Detection. \textit{Sensors}, vol. 25, no. 6, p. 1656, 2025. DOI: 10.3390/s25061656.
+
+\bibitem{botland_esp32}
+Botland. \textit{ESP32 - Co to jest i do czego służy?} 2024. [Online]. Dostępne: \url{https://botland.com.pl/blog/esp32-co-to-jest-i-do-czego-sluzy/}
+
+\bibitem{electronics_lang}
+Performance Evaluation of Programming Languages on ESP32 Microcontroller. \textit{Electronics}, vol. 12, no. 1, p. 143, 2022.
+
+\bibitem{esp32_trm}
+Espressif Systems. \textit{ESP32 Technical Reference Manual}. 2024. [Online]. Dostępne: \url{https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf}
+
+\bibitem{msalamon_rodziny}
+MSalamon.pl. \textit{ESP32 od Podstaw – Przegląd Rodzin Układów i Ich Najważniejszych Cech}. 2025. [Online]. Dostępne: \url{https://sklep.msalamon.pl/blog/esp32-od-podstaw-przeglad-rodzin-ukladow-i-ich-najwazniejszych-cech/}
+
+\bibitem{wikipedia_nmea}
+Wikipedia. \textit{NMEA 0183 – Wikipedia, wolna encyklopedia}. 2005. [Online]. Dostępne: \url{https://pl.wikipedia.org/wiki/NMEA_0183}
+
+\bibitem{elektropraktyk_nmea}
+Elektro-Praktyk. \textit{System nawigacji satelitarnej GPS, część 8 – Protokół NMEA-0183}. 2013.
+
+\bibitem{geoforum_nmea}
+Geoforum.pl. \textit{Uniwersalny język nawigacji – Standard NMEA-0183 w odbiornikach GPS}. (b.d.).
+
+\bibitem{elektropraktyk_uart}
+Elektro-Praktyk. \textit{UART na SPI/I2C – Zestawienie cech i parametrów mostków komunikacyjnych}. 2013.
+
+\bibitem{wonderfulpcb_protocols}
+WonderfulPCB. \textit{Wybór właściwego protokołu komunikacyjnego: I2C, SPI lub UART}. 2025. [Online]. Dostępne: \url{https://www.wonderfulpcb.com/pl/blog/i2c-communication-protocol-vs-spi-vs-uart-comparison-guide/}
+
+\bibitem{ourpcb_i2c_spi}
+OurPCB. \textit{I2C vs SPI: Różnice, które powinieneś znać}. (b.d.). [Online]. Dostępne: \url{https://ourpcb.pl/i2c-vs-spi.html}
+
+\bibitem{gps_comparison_2025}
+Comparative Experimental Evaluation of the Error of GPS Modules. \textit{Automatic Control and Power Systems}, vol. 10, no. 2, 2025. [Online]. Dostępne: \url{https://science.lpnu.ua/acps/all-volumes-and-issues/volume-10-number-2-2025/comparative-experimental-evaluation-error-gps}
+
+\bibitem{esp32_power}
+DeepBlueEmbedded. \textit{ESP32 Sleep Modes \& Power Consumption}. (b.d.). [Online]. Dostępne: \url{https://deepbluembedded.com/esp32-sleep-modes-power-consumption-in-each-mode/}
+
+\bibitem{roboticsbd_neo6m}
+Robotics Bangladesh. \textit{GPS Module NEO-6M Satellite Positioning Module}. (b.d.). [Online]. Dostępne: \url{https://roboticsbd.com/electronics-module/2397-gps-module-neo-6m-satellite-positioning-module-for-arduino-with-microusb-robotics-bangladesh-roboticsbd-745.html}
+
+\bibitem{bitbank_oled}
+BitBank Software. \textit{How much current do OLED displays use?}. 2019. [Online]. Dostępne: \url{https://bitbanksoftware.blogspot.com/2019/06/how-much-current-do-oled-displays-use.html}
+
+\end{thebibliography}
 
 \end{document}
