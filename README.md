@@ -118,7 +118,7 @@ Na panelu dolnym wyświetlane są kluczowe parametry odświeżane w czasie rzecz
 
 W sytuacji, gdy urządzenie nie posiada jeszcze ustalonej pozycji GPS (np. zaraz po włączeniu wewnątrz budynku), na ekranie widnieje wyraźny komunikat o szukaniu sygnału GPS.
 
-![Ekran startowy aplikacji - system gotowy do pracy](images/Screenshot_20260109_143942_Chrome.jpg)
+<img src="images/Screenshot_20260109_143942_Chrome.jpg" alt="Ekran startowy aplikacji - system gotowy do pracy" width="50%"/>
 
 **Proces nagrywania trasy**
 
@@ -135,8 +135,8 @@ Po zakończeniu aktywności użytkownik ma do wyboru trzy opcje:
 2. **ZAPISZ:** Trwałe zapisanie zgromadzonych danych do pliku w pamięci urządzenia.
 3. **ODRZUĆ:** Anulowanie sesji i usunięcie tymczasowych danych bez zapisu.
 
-![Trwająca sesja z rysowaną trasą](images/Screenshot_20260109_144825_Chrome.jpg)
-![Stan wstrzymania nagrywania (Pauza)](images/Screenshot_20260109_144835_Chrome.jpg)
+<img src="images/Screenshot_20260109_144825_Chrome.jpg" alt="Trwająca sesja z rysowaną trasą" width="50%"/>
+<img src="images/Screenshot_20260109_144835_Chrome.jpg" alt="Stan wstrzymania nagrywania (Pauza)" width="50%"/>
 
 **Wykresy i analiza trendów**
 
@@ -147,7 +147,7 @@ Dla bardziej wnikliwej analizy aktywności, aplikacja udostępnia sekcję wykres
 * Wykres precyzji GPS (HDOP).
 * Odczyty z akcelerometru (siły przeciążeń).
 
-![Wykresy parametrów telemetrycznych](images/Screenshot_20260109_144831_Chrome.jpg)
+<img src="images/Screenshot_20260109_144831_Chrome.jpg" alt="Wykresy parametrów telemetrycznych" width="50%"/>
 
 #### Zarządzanie plikami i historia tras
 
@@ -160,7 +160,7 @@ Dostępne funkcjonalności obejmują:
 * **Usuwanie:** Trwałe usunięcie niepotrzebnych plików.
 * **Podgląd:** Specjalny tryb wizualizacji archiwalnej sesji.
 
-![Lista zapisanych plików](images/Screenshot_20260109_150502_Chrome.jpg)
+<img src="images/Screenshot_20260109_150502_Chrome.jpg" alt="Lista zapisanych plików" width="50%"/>
 
 W trybie **podglądu pliku** interfejs prezentuje kompletny ślad trasy na mapie oraz rozszerzony zestaw statystyk, niedostępnych w trybie na żywo, takich jak:
 
@@ -170,11 +170,11 @@ W trybie **podglądu pliku** interfejs prezentuje kompletny ślad trasy na mapie
 * **Dystans:** Całkowita długość trasy.
 * **Średnie HDOP:** Średnia wartość precyzji pomiaru z całego zapisu, pozwalająca ocenić wiarygodność danych.
 
-![Tryb podglądu historii z dodatkowymi parametrami](images/Screenshot_20260109_145718_Chrome.jpg)
+<img src="images/Screenshot_20260109_145718_Chrome.jpg" alt="Tryb podglądu historii z dodatkowymi parametrami" width="50%"/>
 
 Dodatkowo, w trybie podglądu użytkownik ma dostęp do szczegółowych wykresów analizujących przebieg całej trasy. Są to te same wykresy co w trybie na żywo (prędkość, wysokość, HDOP), ale przedstawiające kompletne dane z całego nagrania, co pozwala na łatwą identyfikację kluczowych momentów wycieczki.
 
-![Szczegółowa analiza wykresów w trybie przeglądania historii](images/Screenshot_20260109_151924_Chrome.jpg)
+<img src="images/Screenshot_20260109_151924_Chrome.jpg" alt="Szczegółowa analiza wykresów w trybie przeglądania historii" width="50%"/>
 
 Dane zapisywane są na karcie SD w formacie CSV (Comma Separated Values), co umożliwia ich łatwy import do arkuszy kalkulacyjnych (np. Excel) lub specjalistycznego oprogramowania GIS. Każda linia w pliku odpowiada jednemu punktowi pomiarowemu i zawiera następujące pola, oddzielone przecinkami:
 
@@ -203,7 +203,7 @@ Niezależnie od aplikacji mobilnej, urządzenie wyposażone jest w fizyczny ekra
 * Bieżąca prędkość oraz przebyty dystans.
 * Adres IP oraz nazwa sieci WiFi (SSID) w celu ułatwienia połączenia.
 
-![Wyświetlacz OLED w działaniu](images/20260109_150650.jpg)
+<img src="images/20260109_150650.jpg" alt="Wyświetlacz OLED w działaniu" width="50%"/>
 
 ## Wnioski końcowe
 
