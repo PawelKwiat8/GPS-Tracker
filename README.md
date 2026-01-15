@@ -2,7 +2,7 @@
 
 ## Wstęp
 
-Rozwój technologii Internetu Rzeczy (IoT – Internet of Things) pozwolił na zmniejszenie systemów telemetrycznych. Jeszcze dziesięć lat temu potrzebna była duża infrastruktura sprzętowa. Celem tej pracy jest zaprojektowanie i zbudowanie urządzenia typu “GPS Tracker". Urządzenie ma rejestrować trasę, monitorować parametry ruchu i pokazywać dane w czasie rzeczywistym.
+ Celem tej pracy jest zaprojektowanie i zbudowanie urządzenia typu “GPS Tracker". Urządzenie ma rejestrować trasę, monitorować parametry ruchu i pokazywać dane w czasie rzeczywistym.
 
 Głównym założeniem projektu było stworzenie systemu autonomicznego, zasilanego bateryjnie, który łączy w sobie funkcjonalność klasycznego rejestratora danych (tzw. "czarnej skrzynki") z nowoczesnym interfejsem użytkownika dostępnym przez przeglądarkę internetową (Web Interface).
 
@@ -33,7 +33,7 @@ Wszystkie moduły peryferyjne zostały połączone z mikrokontrolerem zgodnie z 
 **Magistrala I2C (OLED + MPU6050):**
 Urządzenia podłączone równolegle do wspólnych linii SDA i SCL.
 
-![Wyświetlacz OLED w działaniu](images/20260109_150650.jpg)
+
 
 | Urządzenie | Pin Modułu | Pin ESP32 | Uwagi |
 | :--- | :--- | :--- | :--- |
@@ -76,9 +76,7 @@ Obudowa urządzenia przeszła ewolucję od prototypu (Wersja 1) do wersji finaln
 
 Pierwsza wersja obudowy składała się z wielu elementów: podstawy z komorami na moduły i ogniwo 18650, ramki montażowej oraz pokrywy z charakterystycznym wzorem plastra miodu. Projekt zawierał dodatkową klapkę oraz otwory na kartę SD, które w praktyce okazały się zbędne lub problematyczne w druku.
 
-![Fizyczny model prototypu V1](images/20260109_150650.jpg)
-
-*Model fizyczny pierwszej wersji obudowy.*
+![Fizyczny model prototypu V1](images/20260112_211048.png)
 
 ![Widok eksplodowany konstrukcji V1](images/GPS_tracker_presentation.png)
 
@@ -205,6 +203,8 @@ Niezależnie od aplikacji mobilnej, urządzenie wyposażone jest w fizyczny ekra
 * Bieżąca prędkość oraz przebyty dystans.
 * Adres IP oraz nazwa sieci WiFi (SSID) w celu ułatwienia połączenia.
 
+![Wyświetlacz OLED w działaniu](images/20260109_150650.jpg)
+
 ## Wnioski końcowe
 
 Przeprowadzone testy i analiza działania prototypu pozwalają na sformułowanie następujących wniosków:
@@ -215,8 +215,4 @@ Przeprowadzone testy i analiza działania prototypu pozwalają na sformułowanie
 4. **Efektywność energetyczna:** Osiągnięty czas pracy na poziomie ok. 9 godzin przy zasilaniu z jednego ogniwa 18650 (z przetwornicą) czyni urządzenie praktycznym w jednodniowych zastosowaniach.
 5. **Obudowa 3D:** Zaprojektowana obudowa jest kompaktowa i funkcjonalna. Chroni elektronikę przed uszkodzeniami mechanicznymi, zapewniając jednocześnie łatwy dostęp do portu ładowania i karty pamięci.
 
-### Podsumowanie działania
 
-Zrealizowany system działa w pełni poprawnie i spełnił wszystkie założenia oraz cel pracy. Urządzenie pomyślnie przeszło testy terenowe, rejestrując trasy bez awarii. Projekt udowodnił, że wykorzystując tanie i ogólnodostępne moduły (ESP32, NEO-6M), można zbudować narzędzie telemetryczne o funkcjonalności zbliżonej do prostych urządzeń komercyjnych.
-
-Dodatkową wartością projektu jest jego aspekt edukacyjny. Budowa urządzenia wymagała połączenia wiedzy z zakresu elektroniki, druku 3D oraz programowania systemów wbudowanych i aplikacji webowych. Powstały prototyp jest nie tylko działającym urządzeniem, ale także solidną platformą do dalszego rozwoju, np. poprzez dodanie modułu GSM w przyszłości.
