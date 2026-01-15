@@ -1,0 +1,3 @@
+Fragment usunięty z pracy (Filtracja zakłóceń):
+
+Moduły GPS operują na sygnałach radiowych o bardzo niskiej mocy, przez co są niezwykle wrażliwe na zakłócenia elektromagnetyczne (EMI). ESP32 podczas transmisji WiFi generuje znaczne piki prądowe, które mogą wprowadzać szumy w linii zasilania. Aby temu zapobiec, w projekcie kluczowe jest stosowanie kondensatorów filtrujących (elektrolitycznych oraz ceramicznych) jak najbliżej pinów zasilających modułu GPS, co zapewnia stabilność pracy odbiornika satelitarnego.

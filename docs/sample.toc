@@ -1,0 +1,24 @@
+\contentsline {section}{\numberline {1}Wstęp}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Koncepcja architektury systemu telemetrycznego}{2}{subsection.1.1}%
+\contentsline {section}{\numberline {2}Projekt sprzętowy}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Elementy układu}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Konfiguracja interfejsów i połączeń}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Projekt obudowy}{4}{subsection.2.3}%
+\contentsline {section}{\numberline {3}Przegląd technologii i narzędzi}{6}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Rozwój IoT i miniaturyzacja}{6}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Telemetria i przetwarzanie danych}{6}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Architektura ESP32}{6}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}System GNSS i protokół NMEA 0183}{6}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Magistrale komunikacyjne w systemach wbudowanych}{7}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Implementacja oprogramowania}{8}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Opis funkcjonalności i obsługa aplikacji}{8}{subsection.4.1}%
+\contentsline {subsubsection}{\numberline {4.1.1}Ekran główny i parametry na żywo}{8}{subsubsection.4.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.2}Zarządzanie plikami i historia tras}{11}{subsubsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.2}Szczegóły techniczne implementacji}{15}{subsection.4.2}%
+\contentsline {section}{\numberline {5}Testy i analiza wyników}{16}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Testy modułu GPS (Cold Start vs Hot Start)}{16}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Analiza jakości śladu w ruchu}{17}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Bilans energetyczny i czas pracy}{17}{subsection.5.3}%
+\contentsline {section}{\numberline {6}Podsumowanie i wnioski}{17}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Wnioski końcowe}{17}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Podsumowanie działania}{18}{subsection.6.2}%
