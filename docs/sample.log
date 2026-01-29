@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.1.7)  9 JAN 2026 17:59
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.1.7)  19 JAN 2026 20:33
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -6,7 +6,9 @@ entering extended mode
 **/home/pawel/GPS-Tracker/docs/sample.tex
 (/home/pawel/GPS-Tracker/docs/sample.tex
 LaTeX2e <2021-11-15> patch level 1
-L3 programming layer <2022-01-21> (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+L3 programming layer <2022-01-21> (./EE-dyplom.cls
+Document Class: EE-dyplom 2025/01/19 Thesis class
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
 (/usr/share/texlive/texmf-dist/tex/latex/base/size12.clo
 File: size12.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
@@ -46,15 +48,6 @@ File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
 ))
 \Gin@req@height=\dimen139
 \Gin@req@width=\dimen140
-) (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
-Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count193
-\float@exts=\toks19
-\float@box=\box50
-\@float@everytoks=\toks20
-\@floatcapt=\box51
-) (/usr/share/texlive/texmf-dist/tex/latex/tools/indentfirst.sty
-Package: indentfirst 1995/11/23 v1.03 Indent first paragraph (DPC)
 ) (/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
  (/usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty
@@ -62,9 +55,9 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
  (/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty
 Package: iftex 2020/03/06 v1.0d TeX engine tests
 ))
-\Gm@cnth=\count194
-\Gm@cntv=\count195
-\c@Gm@tempcnt=\count196
+\Gm@cnth=\count193
+\Gm@cntv=\count194
+\c@Gm@tempcnt=\count195
 \Gm@bindingoffset=\dimen141
 \Gm@wd@mp=\dimen142
 \Gm@odd@mp=\dimen143
@@ -73,18 +66,51 @@ Package: iftex 2020/03/06 v1.0d TeX engine tests
 \Gm@layoutheight=\dimen146
 \Gm@layouthoffset=\dimen147
 \Gm@layoutvoffset=\dimen148
-\Gm@dimlist=\toks21
+\Gm@dimlist=\toks19
+) (/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty
+Package: times 2020/03/25 PSNFSS-v9.3 (SPQR) 
+)) (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count196
+\float@exts=\toks20
+\float@box=\box50
+\@float@everytoks=\toks21
+\@floatcapt=\box51
+) (/usr/share/texlive/texmf-dist/tex/latex/tools/tabularx.sty
+Package: tabularx 2020/01/15 v2.11c `tabularx' package (DPC)
+ (/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
+Package: array 2021/10/04 v2.5f Tabular extension package (FMi)
+\col@sep=\dimen149
+\ar@mcellbox=\box52
+\extrarowheight=\dimen150
+\NC@list=\toks22
+\extratabsurround=\skip49
+\backup@length=\skip50
+\ar@cellbox=\box53
+)
+\TX@col@width=\dimen151
+\TX@old@table=\dimen152
+\TX@old@col=\dimen153
+\TX@target=\dimen154
+\TX@delta=\dimen155
+\TX@cols=\count197
+\TX@ftn=\toks23
+) (/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip16
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+) (/usr/share/texlive/texmf-dist/tex/latex/tools/indentfirst.sty
+Package: indentfirst 1995/11/23 v1.03 Indent first paragraph (DPC)
 ) (/usr/share/texlive/texmf-dist/tex/latex/titlesec/titlesec.sty
 Package: titlesec 2021/07/05 v2.14 Sectioning titles
-\ttl@box=\box52
-\beforetitleunit=\skip49
-\aftertitleunit=\skip50
-\ttl@plus=\dimen149
-\ttl@minus=\dimen150
-\ttl@toksa=\toks22
-\titlewidth=\dimen151
-\titlewidthlast=\dimen152
-\titlewidthfirst=\dimen153
+\ttl@box=\box54
+\beforetitleunit=\skip51
+\aftertitleunit=\skip52
+\ttl@plus=\dimen156
+\ttl@minus=\dimen157
+\ttl@toksa=\toks24
+\titlewidth=\dimen158
+\titlewidthlast=\dimen159
+\titlewidthfirst=\dimen160
 ) (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2021-06-07 v7.00m Hypertext links for LaTeX
  (/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
@@ -112,9 +138,9 @@ Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
 ) (/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty
 Package: kvoptions 2020-10-07 v3.14 Key value format for package options (HO)
 )
-\@linkdim=\dimen154
-\Hy@linkcounter=\count197
-\Hy@pagecounter=\count198
+\@linkdim=\dimen161
+\Hy@linkcounter=\count198
+\Hy@pagecounter=\count199
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2021-06-07 v7.00m Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
@@ -126,7 +152,7 @@ Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 ) (/usr/share/texlive/texmf-dist/tex/generic/etexcmds/etexcmds.sty
 Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
 )
-\Hy@SavedSpaceFactor=\count199
+\Hy@SavedSpaceFactor=\count266
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def
 File: puenc.def 2021-06-07 v7.00m Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
@@ -139,21 +165,17 @@ Package hyperref Info: Plain pages OFF on input line 4207.
 Package hyperref Info: Backreferencing OFF on input line 4212.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4445.
-\c@Hy@tempcnt=\count266
- (/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
-\Urlmuskip=\muskip16
-Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
-)
+\c@Hy@tempcnt=\count267
 LaTeX Info: Redefining \url on input line 4804.
-\XeTeXLinkMargin=\dimen155
+\XeTeXLinkMargin=\dimen162
  (/usr/share/texlive/texmf-dist/tex/generic/bitset/bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
  (/usr/share/texlive/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO)
 ))
-\Fld@menulength=\count267
-\Field@Width=\dimen156
-\Fld@charsize=\dimen157
+\Fld@menulength=\count268
+\Field@Width=\dimen163
+\Fld@charsize=\dimen164
 Package hyperref Info: Hyper figures OFF on input line 6076.
 Package hyperref Info: Link nesting OFF on input line 6081.
 Package hyperref Info: Hyper index ON on input line 6084.
@@ -167,9 +189,9 @@ LaTeX Info: Redefining \pageref on input line 6150.
 Package: atbegshi-ltx 2021/01/10 v1.0c Emulation of the original atbegshi
 package with kernel methods
 )
-\Hy@abspage=\count268
-\c@Item=\count269
-\c@Hfootnote=\count270
+\Hy@abspage=\count269
+\c@Item=\count270
+\c@Hfootnote=\count271
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
@@ -178,8 +200,8 @@ File: hpdftex.def 2021-06-07 v7.00m Hyperref driver for pdfTeX
 Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend package
 with kernel methods
 )
-\Fld@listcount=\count271
-\c@bookmark@seq@number=\count272
+\Fld@listcount=\count272
+\c@bookmark@seq@number=\count273
  (/usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
 Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
  (/usr/share/texlive/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
@@ -187,45 +209,49 @@ Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 )
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 286.
 )
-\Hy@SectionHShift=\skip51
+\Hy@SectionHShift=\skip53
+)
+LaTeX Font Info:    Trying to load font information for T1+ptm on input line 30.
+ (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ptm.fd
+File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 ) (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count273
-\l__pdf_internal_box=\box53
+\l__color_backend_stack_int=\count274
+\l__pdf_internal_box=\box55
 ) (./sample.aux)
 \openout1 = `sample.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
  (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count274
-\scratchdimen=\dimen158
-\scratchbox=\box54
-\nofMPsegments=\count275
-\nofMParguments=\count276
-\everyMPshowfont=\toks23
-\MPscratchCnt=\count277
-\MPscratchDim=\dimen159
-\MPnumerator=\count278
-\makeMPintoPDFobject=\count279
-\everyMPtoPDFconversion=\toks24
+\scratchcounter=\count275
+\scratchdimen=\dimen165
+\scratchbox=\box56
+\nofMPsegments=\count276
+\nofMParguments=\count277
+\everyMPshowfont=\toks25
+\MPscratchCnt=\count278
+\MPscratchDim=\dimen166
+\MPnumerator=\count279
+\makeMPintoPDFobject=\count280
+\everyMPtoPDFconversion=\toks26
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
@@ -266,7 +292,7 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring OFF on input line 21.
+Package hyperref Info: Link coloring OFF on input line 30.
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
  (/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty
@@ -274,20 +300,27 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ) (/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count280
+\c@section@level=\count281
 )
-LaTeX Info: Redefining \ref on input line 21.
-LaTeX Info: Redefining \pageref on input line 21.
-LaTeX Info: Redefining \nameref on input line 21.
+LaTeX Info: Redefining \ref on input line 30.
+LaTeX Info: Redefining \pageref on input line 30.
+LaTeX Info: Redefining \nameref on input line 30.
  (./sample.out) (./sample.out)
 \@outlinefile=\write3
 \openout3 = `sample.out'.
 
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <14.4> on input line 24.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 24.
- (./sample.toc
+<../images/mel-ikona-wpisu.jpg, id=112, 702.625pt x 401.5pt>
+File: ../images/mel-ikona-wpisu.jpg Graphic file (type jpg)
+<use ../images/mel-ikona-wpisu.jpg>
+Package pdftex.def Info: ../images/mel-ikona-wpisu.jpg  used on input line 33.
+(pdftex.def)             Requested size: 193.47577pt x 110.55681pt.
+ [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <../images/mel-ikona-wpisu.jpg>]pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.49 \newpage
+              [1] (./sample.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <12> on input line 2.
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -298,202 +331,186 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 \tf@toc=\write4
 \openout4 = `sample.toc'.
 
- [1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (12.67143pt too wide) in paragraph at lines 31--32
-[]\T1/cmr/m/n/12 Gªównym za-ªo»e-niem pro-jektu byªo stworze-nie sys-temu au-to-nomicznego, za-si-lanego bateryjnie,
- []
-
-[2]
-<../images/schemat.jpg, id=140, 1659.19875pt x 1036.87375pt>
+ [2]
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 86.
+ (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+)
+<../images/schemat.jpg, id=154, 1659.19875pt x 1036.87375pt>
 File: ../images/schemat.jpg Graphic file (type jpg)
 <use ../images/schemat.jpg>
-Package pdftex.def Info: ../images/schemat.jpg  used on input line 68.
+Package pdftex.def Info: ../images/schemat.jpg  used on input line 99.
 (pdftex.def)             Requested size: 483.69684pt x 302.26782pt.
- [3 <../images/schemat.jpg>]
-<../images/GPS_tracker.png, id=147, 1168.365pt x 728.7225pt>
-File: ../images/GPS_tracker.png Graphic file (type png)
-<use ../images/GPS_tracker.png>
-Package pdftex.def Info: ../images/GPS_tracker.png  used on input line 146.
-(pdftex.def)             Requested size: 386.95894pt x 241.34648pt.
-<../images/GPS_tracke2r.png, id=148, 1168.365pt x 728.7225pt>
-File: ../images/GPS_tracke2r.png Graphic file (type png)
-<use ../images/GPS_tracke2r.png>
-Package pdftex.def Info: ../images/GPS_tracke2r.png  used on input line 153.
-(pdftex.def)             Requested size: 386.95894pt x 241.34648pt.
- [4 <../images/GPS_tracker.png>]
-<../images/GPS_tracker_presentation.png, id=156, 994.46532pt x 637.63219pt>
+ [3] [4 <../images/schemat.jpg>]
+<../images/20260112_211048.png, id=167, 2666.96375pt x 2390.9325pt>
+File: ../images/20260112_211048.png Graphic file (type png)
+<use ../images/20260112_211048.png>
+Package pdftex.def Info: ../images/20260112_211048.png  used on input line 178.
+(pdftex.def)             Requested size: 290.22105pt x 260.15775pt.
+<../images/GPS_tracker_presentation.png, id=169, 994.46532pt x 637.63219pt>
 File: ../images/GPS_tracker_presentation.png Graphic file (type png)
 <use ../images/GPS_tracker_presentation.png>
-Package pdftex.def Info: ../images/GPS_tracker_presentation.png  used on input line 160.
-(pdftex.def)             Requested size: 435.32419pt x 279.11906pt.
- [5 <../images/GPS_tracke2r.png> <../images/GPS_tracker_presentation.png>]
-Overfull \hbox (10.17285pt too wide) in paragraph at lines 168--169
-[]\T1/cmr/m/n/12 Budowa track-era GPS wymaga poª¡czenia kilku ró»nych tech-nologii ko-mu-nika-cyjnych. Poni»ej
- []
-
-
-Overfull \hbox (16.88559pt too wide) in paragraph at lines 190--191
-[]\T1/cmr/m/n/12 ESP32 posi-ada tak»e wbu-dowane mod-uªy Wi-Fi i Blue-tooth, co czyni go ide-al-nym rozwi¡zaniem
- []
-
-[6] [7]
-<../images/Screenshot_20260109_143942_Chrome.jpg, id=204, 1084.05pt x 2347.77126pt>
+Package pdftex.def Info: ../images/GPS_tracker_presentation.png  used on input line 184.
+(pdftex.def)             Requested size: 386.95894pt x 248.11124pt.
+ [5 <../images/20260112_211048.png>]
+<../images/GPS-TRACKER_V2.png, id=177, 1153.30875pt x 624.83438pt>
+File: ../images/GPS-TRACKER_V2.png Graphic file (type png)
+<use ../images/GPS-TRACKER_V2.png>
+Package pdftex.def Info: ../images/GPS-TRACKER_V2.png  used on input line 201.
+(pdftex.def)             Requested size: 386.95894pt x 209.64735pt.
+ [6 <../images/GPS_tracker_presentation.png>]
+<../images/GPS-TRACKER_V2.2.png, id=189, 1153.30875pt x 624.83438pt>
+File: ../images/GPS-TRACKER_V2.2.png Graphic file (type png)
+<use ../images/GPS-TRACKER_V2.2.png>
+Package pdftex.def Info: ../images/GPS-TRACKER_V2.2.png  used on input line 207.
+(pdftex.def)             Requested size: 386.95894pt x 209.64735pt.
+<../images/GPS-TRACKER_V2_PRESENTATION.png, id=190, 979.40906pt x 533.74406pt>
+File: ../images/GPS-TRACKER_V2_PRESENTATION.png Graphic file (type png)
+<use ../images/GPS-TRACKER_V2_PRESENTATION.png>
+Package pdftex.def Info: ../images/GPS-TRACKER_V2_PRESENTATION.png  used on input line 213.
+(pdftex.def)             Requested size: 386.95894pt x 210.87138pt.
+ [7 <../images/GPS-TRACKER_V2.png> <../images/GPS-TRACKER_V2.2.png>] [8 <../images/GPS-TRACKER_V2_PRESENTATION.png>] [9] [10]
+<../images/Screenshot_20260109_143942_Chrome.jpg, id=244, 1084.05pt x 2347.77126pt>
 File: ../images/Screenshot_20260109_143942_Chrome.jpg Graphic file (type jpg)
 <use ../images/Screenshot_20260109_143942_Chrome.jpg>
-Package pdftex.def Info: ../images/Screenshot_20260109_143942_Chrome.jpg  used on input line 252.
+Package pdftex.def Info: ../images/Screenshot_20260109_143942_Chrome.jpg  used on input line 304.
 (pdftex.def)             Requested size: 217.6621pt x 471.37297pt.
- [8] [9 <../images/Screenshot_20260109_143942_Chrome.jpg>]
-<../images/Screenshot_20260109_144825_Chrome.jpg, id=214, 1084.05pt x 1833.85126pt>
+ [11]
+Underfull \hbox (badness 1019) in paragraph at lines 311--312
+[]\T1/ptm/m/n/12 Sterowanie pro-ce-sem re-jes-tracji odbywa si¦ za po-moc¡ cen-tral-nego przy-cisku \T1/ptm/b/n/12 "START"\T1/ptm/m/n/12 .
+ []
+
+[12 <../images/Screenshot_20260109_143942_Chrome.jpg>]
+<../images/Screenshot_20260109_144825_Chrome.jpg, id=255, 1084.05pt x 1833.85126pt>
 File: ../images/Screenshot_20260109_144825_Chrome.jpg Graphic file (type jpg)
 <use ../images/Screenshot_20260109_144825_Chrome.jpg>
-Package pdftex.def Info: ../images/Screenshot_20260109_144825_Chrome.jpg  used on input line 278.
+Package pdftex.def Info: ../images/Screenshot_20260109_144825_Chrome.jpg  used on input line 330.
 (pdftex.def)             Requested size: 217.6621pt x 368.19086pt.
-<../images/Screenshot_20260109_144835_Chrome.jpg, id=215, 1084.05pt x 1966.34625pt>
+<../images/Screenshot_20260109_144835_Chrome.jpg, id=256, 1084.05pt x 1966.34625pt>
 File: ../images/Screenshot_20260109_144835_Chrome.jpg Graphic file (type jpg)
 <use ../images/Screenshot_20260109_144835_Chrome.jpg>
-Package pdftex.def Info: ../images/Screenshot_20260109_144835_Chrome.jpg  used on input line 283.
+Package pdftex.def Info: ../images/Screenshot_20260109_144835_Chrome.jpg  used on input line 335.
 (pdftex.def)             Requested size: 217.6621pt x 394.7925pt.
-<../images/Screenshot_20260109_144831_Chrome.jpg, id=216, 1084.05pt x 1974.37625pt>
+<../images/Screenshot_20260109_144831_Chrome.jpg, id=257, 1084.05pt x 1974.37625pt>
 File: ../images/Screenshot_20260109_144831_Chrome.jpg Graphic file (type jpg)
 <use ../images/Screenshot_20260109_144831_Chrome.jpg>
-Package pdftex.def Info: ../images/Screenshot_20260109_144831_Chrome.jpg  used on input line 300.
+Package pdftex.def Info: ../images/Screenshot_20260109_144831_Chrome.jpg  used on input line 352.
 (pdftex.def)             Requested size: 217.6621pt x 396.40471pt.
- [10 <../images/Screenshot_20260109_144825_Chrome.jpg> <../images/Screenshot_20260109_144835_Chrome.jpg>]
-Overfull \hbox (24.55519pt too wide) in paragraph at lines 312--313
-[]\T1/cmr/bx/n/12 Pobieranie: \T1/cmr/m/n/12 Trans-fer wybranego pliku .csv/.txt bezpo±red-nio do pami¦ci tele-fonu/komputera. 
- []
-
-<../images/Screenshot_20260109_150502_Chrome.jpg, id=226, 1071.00125pt x 1954.30125pt>
+ [13 <../images/Screenshot_20260109_144825_Chrome.jpg> <../images/Screenshot_20260109_144835_Chrome.jpg>]
+<../images/Screenshot_20260109_150502_Chrome.jpg, id=267, 1071.00125pt x 1954.30125pt>
 File: ../images/Screenshot_20260109_150502_Chrome.jpg Graphic file (type jpg)
 <use ../images/Screenshot_20260109_150502_Chrome.jpg>
-Package pdftex.def Info: ../images/Screenshot_20260109_150502_Chrome.jpg  used on input line 319.
+Package pdftex.def Info: ../images/Screenshot_20260109_150502_Chrome.jpg  used on input line 371.
 (pdftex.def)             Requested size: 241.84842pt x 441.30911pt.
-[11 <../images/Screenshot_20260109_144831_Chrome.jpg>]
-<../images/Screenshot_20260109_145718_Chrome.jpg, id=232, 1084.05pt x 1968.35374pt>
+ [14 <../images/Screenshot_20260109_144831_Chrome.jpg>]
+<../images/Screenshot_20260109_145718_Chrome.jpg, id=273, 1084.05pt x 1968.35374pt>
 File: ../images/Screenshot_20260109_145718_Chrome.jpg Graphic file (type jpg)
 <use ../images/Screenshot_20260109_145718_Chrome.jpg>
-Package pdftex.def Info: ../images/Screenshot_20260109_145718_Chrome.jpg  used on input line 334.
+Package pdftex.def Info: ../images/Screenshot_20260109_145718_Chrome.jpg  used on input line 386.
 (pdftex.def)             Requested size: 241.84842pt x 439.10616pt.
- [12 <../images/Screenshot_20260109_150502_Chrome.jpg>]
-<../images/Screenshot_20260109_151924_Chrome.jpg, id=238, 1084.05pt x 1966.34625pt>
+ [15 <../images/Screenshot_20260109_150502_Chrome.jpg>]
+<../images/Screenshot_20260109_151924_Chrome.jpg, id=279, 1084.05pt x 1966.34625pt>
 File: ../images/Screenshot_20260109_151924_Chrome.jpg Graphic file (type jpg)
 <use ../images/Screenshot_20260109_151924_Chrome.jpg>
-Package pdftex.def Info: ../images/Screenshot_20260109_151924_Chrome.jpg  used on input line 342.
+Package pdftex.def Info: ../images/Screenshot_20260109_151924_Chrome.jpg  used on input line 394.
 (pdftex.def)             Requested size: 217.6621pt x 394.7925pt.
- [13 <../images/Screenshot_20260109_145718_Chrome.jpg>]
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 360.
- (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
-File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
-) [14 <../images/Screenshot_20260109_151924_Chrome.jpg>]
-<../images/20260109_150650.jpg, id=250, 3114.63625pt x 1672.2475pt>
+ [16 <../images/Screenshot_20260109_145718_Chrome.jpg>]
+LaTeX Font Info:    Trying to load font information for T1+pcr on input line 412.
+ (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd
+File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
+) [17 <../images/Screenshot_20260109_151924_Chrome.jpg>]
+<../images/20260109_150650.jpg, id=290, 3114.63625pt x 1672.2475pt>
 File: ../images/20260109_150650.jpg Graphic file (type jpg)
 <use ../images/20260109_150650.jpg>
-Package pdftex.def Info: ../images/20260109_150650.jpg  used on input line 377.
+Package pdftex.def Info: ../images/20260109_150650.jpg  used on input line 429.
 (pdftex.def)             Requested size: 338.5863pt x 181.7789pt.
- [15 <../images/20260109_150650.jpg>]
-Overfull \hbox (2.70633pt too wide) in paragraph at lines 433--434
-\T1/cmr/m/n/12 naty-ch-mi-as-towo (za-zwyczaj poni»ej 5 sekund), co potwierdza poprawno±¢ dzi-aªa-nia ukªadu
- []
-
-[16] [17] [18]
-Underfull \hbox (badness 2326) in paragraph at lines 497--498
-[]\T1/cmr/m/n/12 Espressif Sys-tems. \T1/cmr/m/it/12 ESP32 Tech-ni-cal Ref-er-ence Man-ual\T1/cmr/m/n/12 . 2024. [On-line]. Dost¦pne:
+ [18 <../images/20260109_150650.jpg>] [19] [20] [21]
+Underfull \hbox (badness 7576) in paragraph at lines 551--552
+[]\T1/ptm/m/n/12 Espressif Sys-tems. \T1/ptm/m/it/12 ESP32 Tech-ni-cal Ref-er-ence Man-ual\T1/ptm/m/n/12 . 2024. [On-line]. Dost¦pne:
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 497--498
-[]$\T1/cmtt/m/n/12 https : / / www . espressif . com / sites / default / files / documentation / esp32 _
+Underfull \hbox (badness 10000) in paragraph at lines 551--552
+[]$\T1/pcr/m/n/12 https : / / www\OML/cmm/m/it/12 :\T1/pcr/m/n/12 espressif\OML/cmm/m/it/12 :\T1/pcr/m/n/12 com / sites / default / files / documentation /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 500--501
-[]\T1/cmr/m/n/12 MSalamon.pl. \T1/cmr/m/it/12 ESP32 od Pod-staw ^^U Przegl¡d Rodzin Ukªadów i Ich Na-
+Underfull \hbox (badness 2261) in paragraph at lines 554--555
+[]\T1/ptm/m/n/12 MSalamon.pl. \T1/ptm/m/it/12 ESP32 od Pod-staw ^^U Przegl¡d Rodzin Ukªadów i Ich Na-jwa»niejszych
  []
 
 
-Underfull \hbox (badness 1694) in paragraph at lines 500--501
-\T1/cmr/m/it/12 jwa»niejszych Cech\T1/cmr/m/n/12 . 2025. [On-line]. Dost¦pne: []$\T1/cmtt/m/n/12 https : / / sklep . msalamon . pl / blog /
+Underfull \hbox (badness 2961) in paragraph at lines 569--570
+[]\T1/ptm/m/n/12 WonderfulPCB. \T1/ptm/m/it/12 Wybór wªa±-ci-wego pro-tokoªu ko-mu-nika-cyjnego: I2C, SPI lub UART\T1/ptm/m/n/12 .
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 515--516
-[]\T1/cmr/m/n/12 WonderfulPCB. \T1/cmr/m/it/12 Wybór wªa±-ci-wego pro-tokoªu ko-mu-nika-cyjnego: I2C, SPI lub
+Underfull \hbox (badness 10000) in paragraph at lines 569--570
+\T1/ptm/m/n/12 2025. [On-line]. Dost¦pne: []$\T1/pcr/m/n/12 https : / / www\OML/cmm/m/it/12 :\T1/pcr/m/n/12 wonderfulpcb\OML/cmm/m/it/12 :\T1/pcr/m/n/12 com / pl / blog / i2c -[]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 515--516
-\T1/cmr/m/it/12 UART\T1/cmr/m/n/12 . 2025. [On-line]. Dost¦pne: []$\T1/cmtt/m/n/12 https : / / www . wonderfulpcb . com / pl / blog /
+Underfull \hbox (badness 10000) in paragraph at lines 575--576
+[]\T1/ptm/m/n/12 Comparative Ex-per-i-men-tal Eval-u-a-tion of the Er-ror of GPS Mod-ules. \T1/ptm/m/it/12 Au-to-matic
  []
 
 
-Underfull \hbox (badness 2020) in paragraph at lines 521--522
-[]\T1/cmr/m/n/12 Comparative Ex-per-i-men-tal Eval-u-a-tion of the Er-ror of GPS Mod-ules. \T1/cmr/m/it/12 Au-to-matic
+Underfull \hbox (badness 3965) in paragraph at lines 575--576
+\T1/ptm/m/it/12 Con-trol and Power Sys-tems\T1/ptm/m/n/12 , vol. 10, no. 2, 2025. [On-line]. Dost¦pne: []$\T1/pcr/m/n/12 https :
  []
 
 
-Underfull \hbox (badness 1859) in paragraph at lines 521--522
-\T1/cmr/m/it/12 Con-trol and Power Sys-tems\T1/cmr/m/n/12 , vol. 10, no. 2, 2025. [On-line]. Dost¦pne: []$\T1/cmtt/m/n/12 https :
+Underfull \hbox (badness 10000) in paragraph at lines 575--576
+\T1/pcr/m/n/12 / / science\OML/cmm/m/it/12 :\T1/pcr/m/n/12 lpnu\OML/cmm/m/it/12 :\T1/pcr/m/n/12 ua / acps / all -[] volumes -[] and -[] issues / volume -[] 10 -[] number -[]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 521--522
-\T1/cmtt/m/n/12 / / science . lpnu . ua / acps / all-[]volumes-[]and-[]issues / volume-[]10-[]number-[]2-[]2025 /
+Underfull \hbox (badness 7963) in paragraph at lines 578--579
+[]\T1/ptm/m/n/12 DeepBlueEmbedded. \T1/ptm/m/it/12 ESP32 Sleep Modes & Power Con-sump-tion\T1/ptm/m/n/12 . (b.d.). [On-line].
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 524--525
-[]\T1/cmr/m/n/12 DeepBlueEmbedded. \T1/cmr/m/it/12 ESP32 Sleep Modes & Power Con-sump-
+Underfull \hbox (badness 10000) in paragraph at lines 578--579
+\T1/ptm/m/n/12 Dost¦pne: []$\T1/pcr/m/n/12 https : / / deepbluembedded\OML/cmm/m/it/12 :\T1/pcr/m/n/12 com / esp32 -[] sleep -[] modes -[] power -[]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 524--525
-\T1/cmr/m/it/12 tion\T1/cmr/m/n/12 . (b.d.). [On-line]. Dost¦pne: []$\T1/cmtt/m/n/12 https : / / deepbluembedded . com /
+Underfull \hbox (badness 1735) in paragraph at lines 581--582
+[]\T1/ptm/m/n/12 Robotics Bangladesh. \T1/ptm/m/it/12 GPS Mod-ule NEO-6M Satel-lite Po-si-tion-ing Mod-ule\T1/ptm/m/n/12 . (b.d.). [On-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 527--528
-[]\T1/cmr/m/n/12 Robotics Bangladesh. \T1/cmr/m/it/12 GPS Mod-ule NEO-6M Satel-lite Po-si-tion-ing Mod-ule\T1/cmr/m/n/12 .
+Underfull \hbox (badness 1297) in paragraph at lines 581--582
+\T1/ptm/m/n/12 line]. Dost¦pne: []$\T1/pcr/m/n/12 https : / / roboticsbd\OML/cmm/m/it/12 :\T1/pcr/m/n/12 com / electronics -[] module / 2397 -[] gps -[]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 527--528
-\T1/cmr/m/n/12 (b.d.). [On-line]. Dost¦pne: []$\T1/cmtt/m/n/12 https : / / roboticsbd . com / electronics-[]module /
+Underfull \hbox (badness 10000) in paragraph at lines 581--582
+\T1/pcr/m/n/12 module -[] neo -[] 6m -[] satellite -[] positioning -[] module -[] for -[] arduino -[] with -[]
  []
 
 
-Overfull \hbox (245.55603pt too wide) in paragraph at lines 527--528
-\T1/cmtt/m/n/12 2397-[]gps-[]module-[]neo-[]6m-[]satellite-[]positioning-[]module-[]for-[]arduino-[]with-[]microusb-[]robotics-[]bangladesh-[]roboticsbd-[]745 .
+Underfull \hbox (badness 10000) in paragraph at lines 584--585
+[]$\T1/pcr/m/n/12 https : / / bitbanksoftware\OML/cmm/m/it/12 :\T1/pcr/m/n/12 blogspot\OML/cmm/m/it/12 :\T1/pcr/m/n/12 com / 2019 / 06 / how -[] much -[] current -[]
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 530--531
-[]\T1/cmr/m/n/12 BitBank Soft-ware. \T1/cmr/m/it/12 How much cur-rent do OLED dis-plays use?\T1/cmr/m/n/12 . 2019.
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 530--531
-\T1/cmr/m/n/12 [On-line]. Dost¦pne: []$\T1/cmtt/m/n/12 https : / / bitbanksoftware . blogspot . com / 2019 / 06 /
- []
-
-[19] (./sample.aux)
+[22] (./sample.aux)
 Package rerunfilecheck Info: File `sample.out' has not changed.
-(rerunfilecheck)             Checksum: 9094981566973D692EFC624F001F0164;4981.
+(rerunfilecheck)             Checksum: 12E48E91E986A7145AC4846804FB26A2;5562.
  ) 
 Here is how much of TeX's memory you used:
- 9492 strings out of 480247
- 150417 string characters out of 5896152
- 448606 words of memory out of 5000000
- 27227 multiletter control sequences out of 15000+600000
- 480420 words of font info for 51 fonts, out of 8000000 for 9000
+ 9775 strings out of 480247
+ 155264 string characters out of 5896152
+ 451094 words of memory out of 5000000
+ 27472 multiletter control sequences out of 15000+600000
+ 500933 words of font info for 60 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,8n,63p,603b,409s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/pawel/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecti1200.600pk> </home/pawel/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1200.600pk> </home/pawel/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1200.600pk> </home/pawel/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.600pk> </home/pawel/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </home/pawel/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> </home/pawel/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1728.600pk> </home/pawel/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1440.600pk> </home/pawel/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx2074.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on sample.pdf (19 pages, 3762580 bytes).
+ 70i,8n,76p,603b,409s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on sample.pdf (23 pages, 10263625 bytes).
 PDF statistics:
- 795 PDF objects out of 1000 (max. 8388607)
- 333 compressed objects within 4 object streams
- 83 named destinations out of 1000 (max. 500000)
- 253 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 409 PDF objects out of 1000 (max. 8388607)
+ 347 compressed objects within 4 object streams
+ 96 named destinations out of 1000 (max. 500000)
+ 292 words of extra memory for PDF output out of 10000 (max. 10000000)
 

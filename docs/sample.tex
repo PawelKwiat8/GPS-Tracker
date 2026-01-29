@@ -1,37 +1,68 @@
-\documentclass[12pt, a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{graphicx}
+\documentclass[12pt, a4paper]{EE-dyplom}
+
 \usepackage{float}
+\usepackage{tabularx}
+\usepackage{url}
+\def\UrlBreaks{\do\/\do-}
 \usepackage{indentfirst}
-\usepackage{geometry}
-\geometry{
- a4paper,
- total={170mm,257mm},
- left=25mm,
- top=25mm,
-}
 \usepackage{titlesec}
 \usepackage{hyperref}
 
-\title{\textbf{Projekt i realizacja autonomicznego rejestratora parametrów ruchu GPS z interfejsem bezprzewodowym opartym o układ ESP32}}
-\author{Paweł}
-\date{\today}
+% DANE DO STRONY TYTUŁOWEJ
+\kierunek{Automatyka, Robotyka i Informatyka Przemysłowa}
+\title{Projekt i realizacja autonomicznego rejestratora parametrów ruchu GPS z interfejsem bezprzewodowym opartym o układ ESP32}
+\album{320126}
+\author{Paweł Kwiatkowski}
+\promotor{[...]} 
+\date{2026}
+
+% Ręczna konfiguracja języka polskiego
+\renewcommand{\contentsname}{Spis treści}
+\renewcommand{\listfigurename}{Spis rysunków}
+\renewcommand{\listtablename}{Spis tabel}
+\renewcommand{\figurename}{Rysunek}
+\renewcommand{\tablename}{Tabela}
+\renewcommand{\refname}{Bibliografia}
+\renewcommand{\abstractname}{Streszczenie}
+
+\sloppy 
 
 \begin{document}
 
 \maketitle
-\tableofcontents
+
 \newpage
 
+\begin{abstract}
+Celem niniejszej pracy inżynierskiej jest zaprojektowanie i realizacja autonomicznego 
+rejestratora parametrów ruchu GPS, wyposażonego w zintegrowany interfejs bezprzewodowy WiFi. 
+Urządzenie, oparte na dwurdzeniowym mikrokontrolerze ESP32, łączy w sobie funkcjonalność klasycznego
+ "data-loggera" zapisującego dane na karcie pamięci SD z nowoczesną wizualizacją parametrów w czasie r
+ zeczywistym poprzez dedykowaną stronę internetową (Web Interface).
+
+W ramach projektu opracowano kompletną warstwę sprzętową, integrującą moduł nawigacji satelitarnej 
+NEO-6M, czujnik inercyjny IMU (MPU6050) oraz wyświetlacz OLED. Praca opisuje również 
+proces projektowania ergonomicznej obudowy  oraz jej wykonanie w technologii druku 3D. 
+Przeprowadzone testy terenowe potwierdziły poprawność działania prototypu, stabilność rejestracji śladu 
+oraz satysfakcjonujący czas pracy na zasilaniu bateryjnym.
+\end{abstract}
+\newpage
+
+\tableofcontents
+\newpage
 \section{Wstęp}
+\subsection{Cel pracy i założenia projektowe}
 
-Rozwój technologii Internetu Rzeczy (IoT – Internet of Things) pozwolił na zmniejszenie systemów telemetrycznych. Jeszcze dziesięć lat temu potrzebna była duża infrastruktura sprzętowa. Celem tej pracy jest zaprojektowanie i zbudowanie urządzenia typu “GPS Tracker". Urządzenie ma rejestrować trasę, monitorować parametry ruchu i pokazywać dane w czasie rzeczywistym.
+Celem tej pracy jest zaprojektowanie i 
+zbudowanie urządzenia typu “GPS Tracker". Urządzenie ma rejestrować trasę,
+monitorować parametry ruchu i pokazywać dane w czasie rzeczywistym.
 
-Głównym założeniem projektu było stworzenie systemu autonomicznego, zasilanego bateryjnie, który łączy w sobie funkcjonalność klasycznego rejestratora danych (tzw. "czarnej skrzynki") z nowoczesnym interfejsem użytkownika dostępnym przez przeglądarkę internetową (Web Interface).
+Głównym założeniem projektu było stworzenie systemu autonomicznego, 
+zasilanego bateryjnie, który łączy w sobie funkcjonalność klasycznego rejestratora danych 
+ z nowoczesnym interfejsem użytkownika dostępnym przez przeglądarkę 
+internetową (Web Interface).
 
 \subsection{Koncepcja architektury systemu telemetrycznego}
-Największy problem przy tworzeniu przenośnych rejestratorów danych to znalezienie balansu między siłą obliczeń a zużyciem prądu. Stare, proste rejestratory danych tylko zapisują dane i nic więcej nie robią. Natomiast nowe rozwiązania IoT chcą przetwarzać dane tam, gdzie je zbierają, i nie potrzebują zewnętrznych serwerów. Z mojego doświadczenia widzę, że ten balans decyduje o tym, czy rejestrator będzie działał długo i dobrze.
 
 W niniejszym projekcie przyjęto założenie, że urządzenie nie tylko gromadzi surowe dane pomiarowe, 
 ale działa jako  niezależny serwera aplikacj i udostępnia pełny graficzny interfejs. 
@@ -136,30 +167,51 @@ GND & GND & Wspólna masa \\
 
 \subsection{Projekt obudowy}
 
-Obudowa została zaprojektowana w Autodesk Inventor z przeznaczeniem do druku 3D. Składa się z podstawy,
- ramki montażowej i pokrywy z wzorem plastra miodu. Podstawa zawiera komory na 
- poszczególne moduły oraz schowek na ogniwo 18650. Ramka dystansowa tworzy okno
-  dostępu do ekranu i GPS. Pokrywa z ażurowym wzorem zapewnia podglad wnetrza układu.
+Obudowa urządzenia przeszła ewolucję od prototypu (Wersja 1) do wersji finalnej (Wersja 2), wprowadzając istotne usprawnienia w konstrukcji i ergonomii użytkowania. Obie wersje zostały zaprojektowane w środowisku Autodesk Inventor z przeznaczeniem do druku 3D.
+
+\subsubsection{Wersja 1 (Prototyp)}
+
+Pierwsza wersja obudowy składała się z wielu elementów: podstawy z komorami na moduły i ogniwo 18650, ramki montażowej oraz pokrywy z charakterystycznym wzorem plastra miodu. Projekt zawierał dodatkową klapkę oraz otwory na kartę SD, które w praktyce okazały się zbędne lub problematyczne w druku.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{../images/GPS_tracker.png}
-    \caption{Widok złożonej obudowy}
-    \label{fig:obudowa_top}
+    \includegraphics[width=0.6\textwidth]{../images/20260112_211048.png}
+    \caption{Fizyczny model prototypu V1}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{../images/GPS_tracke2r.png}
-    \caption{RWidok z góry}
-    \label{fig:obudowa_inside}
+    \includegraphics[width=0.8\textwidth]{../images/GPS_tracker_presentation.png}
+    \caption{Widok rozstrzelony konstrukcji V1}
+\end{figure}
+
+\subsubsection{Wersja 2 (Finalna)}
+
+W drugiej wersji wprowadzono szereg udoskonaleń wynikających z testów prototypu:
+\begin{enumerate}
+    \item \textbf{Uproszczona konstrukcja}: Usunięto zbędną klapkę oraz otwory na kartę SD, co zwiększyło sztywność i szczelność obudowy.
+    \item \textbf{Zintegrowana pokrywa}: Dwie oddzielne górne pokrywy zostały połączone w jeden solidny element.
+    \item \textbf{Wzmocnione ścianki}: Zwiększono grubość ścianek, co poprawiło wytrzymałość mechaniczną wydruku.
+    \item \textbf{Lepsze dopasowanie}: Poprawiono spasowanie wszystkich elementów, eliminując luzy.
+    \item \textbf{Dostęp do portów}: Zoptymalizowano otwory na porty USB (dla ładowania i programowania), ułatwiając podłączanie przewodów.
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../images/GPS-TRACKER_V2.png}
+    \caption{Widok złożonej obudowy V2}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{../images/GPS_tracker_presentation.png}
-    \caption{Widok eksplodowany konstrukcji}
-    \label{fig:obudowa_exploded}
+    \includegraphics[width=0.8\textwidth]{../images/GPS-TRACKER_V2.2.png}
+    \caption{Widok obudowy V2 z innej perspektywy}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../images/GPS-TRACKER_V2_PRESENTATION.png}
+    \caption{Widok rozstrzelony konstrukcji V2}
 \end{figure}
 
 \newpage
@@ -436,7 +488,9 @@ Jednym z kluczowych parametrów użytkowych lokalizatora jest czas oczekiwania n
 Jak wskazują badania porównawcze \cite{gps_comparison_2025}, moduł NEO-6M, mimo bycia rozwiązaniem budżetowym, oferuje dokładność porównywalną do droższych sensorów (np. Walksnail WS-M181). Głównymi wadami wymienianymi w literaturze, a potwierdzonymi w niniejszym projekcie, są długi czas zimnego startu (wyszukiwania satelitów) oraz niższa częstotliwość odświeżania. Jednakże, jak zauważają autorzy badania, wady te nie są krytyczne w typowych zastosowaniach amatorskich i przy pomiarach w punktach statycznych.
 
 \subsection{Analiza jakości śladu w ruchu}
-Testy wykazały, że o ile w warunkach statycznych moduł radzi sobie bardzo dobrze, to podczas aktywności dynamicznych (np. bieg) lub przy okresowym przesłanianiu anteny, jakość sygnału zauważalnie spada.
+Testy wykazały, że o ile w warunkch, gdzie emodoł jest donbrze widoczny urządzenie radzi sobie bardzo dobrze, 
+to podczas aktywności bardziej dynamicznych (np. bieg) 
+lub przy okresowym przesłanianiu anteny, jakość sygnału zauważalnie spada.
 
 W momentach, gdy antena jest zasłaniana (np. przez ciało biegacza lub gęste korony drzew), na mapie mogą pojawiać się nieprawdziwe trasy (artefakty), odbiegające od rzeczywistego toru poruszania się. Towarzyszą temu również błędne odczyty prędkości chwilowej. Jest to zjawisko wynikające z chwilowej utraty widoczności satelitów i jest typowe dla odbiorników GPS tej klasy bez wspomagania systemami inercyjnymi.
 
